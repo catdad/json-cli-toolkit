@@ -1,7 +1,8 @@
 /* jshint node: true */
 
-var ns = require('node-stream');
 var _ = require('lodash');
+var ns = require('node-stream');
+var byline = require('byline');
 
 var prettyPrint = false;
 
@@ -39,23 +40,48 @@ module.exports = function(options) {
         prettyPrint = true;
     }
     
+    function writeData(data, pad) {
+        if (_.isString(data)) {
+            output.write(data);
+        } else if (data !== undefined) {
+            output.write(printJson(data));
+        }
+    }
+    
+    function run(data) {
+        return runCommand(command, data, opts);
+    }
+    
     if (opts.multiline) {
-        // TODO implement multiline
-        output.end();
+        // the first padding will not add a new line
+        var padding = '';
+        
+        ns.forEach.json(byline(input), function(data) {
+            var out = run(data);
+            
+            writeData(padding);
+            writeData(out);
+            
+            // set the padding for the following data
+            if (out !== undefined) {
+                padding = '\n';
+            } else {
+                padding = '';
+            }
+        }, function(err) {
+            if (err) {
+                return output.emit('error', err);
+            }
+            
+            output.end();
+        });
     } else {
         ns.wait.json(input, function(err, data) {
             if (err) {
                 return output.emit('error', err);
             }
             
-            var out = runCommand(command, data, opts);
-            
-            if (_.isString(out)) {
-                output.write(out);
-            } else if (out !== undefined) {
-                output.write(printJson(out));
-            }
-            
+            writeData(run(data));
             output.end();
         });
     }
