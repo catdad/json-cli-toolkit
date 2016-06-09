@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/catdad/json-cli-toolkit/issues"
   },
-  "homepage": "https://github.com/catdad/json-cli-toolkit#readme"
+  "homepage": "https://github.com/catdad/json-cli-toolkit#readme",
+  "dependencies": {
+    "lodash": "^4.13.1",
+    "yargs": "^4.7.1"
+  }
 }
