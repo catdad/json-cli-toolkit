@@ -1,0 +1,22 @@
+{
+  "name": "json-cli-toolkit",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "json": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catdad/json-cli-toolkit.git"
+  },
+  "author": "Kiril Vatev <vatev.1@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/catdad/json-cli-toolkit/issues"
+  },
+  "homepage": "https://github.com/catdad/json-cli-toolkit#readme"
+}
