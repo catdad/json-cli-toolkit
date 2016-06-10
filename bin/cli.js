@@ -5,6 +5,7 @@ var yargs = require('yargs');
 var argv = yargs
     .alias('m', 'multiline')
     .alias('p', 'pretty')
+    .alias('r', 'pretrim')
     .argv;
 
 var command = argv._[0];
