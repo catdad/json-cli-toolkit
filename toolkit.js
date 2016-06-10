@@ -7,8 +7,8 @@ var byline = require('byline');
 var prettyPrint = false;
 
 var commands = {
-    echo: require('./lib/echo.js'),
-    pluck: require('./lib/pluck.js'),
+    echo: require('./lib/command/echo.js'),
+    pluck: require('./lib/command/pluck.js'),
 };
 
 function printJson(obj) {

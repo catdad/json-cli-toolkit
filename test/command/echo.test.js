@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 
-var echo = require('../lib/echo.js');
+var echo = require('../../lib/command/echo.js');
 
 describe('[echo]', function() {
     it('returns the exact same object', function() {

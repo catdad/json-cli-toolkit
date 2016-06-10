@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 
-var pluck = require('../lib/pluck.js');
+var pluck = require('../../lib/command/pluck.js');
 
 describe('[pluck]', function() {
     it('returns the property defined by attr', function() {
