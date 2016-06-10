@@ -29,8 +29,7 @@ handleError(output);
 
 function handleError(stream) {
     stream.on('error', function(err) {
-        console.error('stream error:', err);
-        console.error(err.stack);
+        console.error('stream error: %s', err.stack);
         process.exit(1);
     });
 }
