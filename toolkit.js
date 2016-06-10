@@ -5,6 +5,7 @@ var ns = require('node-stream');
 var byline = require('byline');
 
 var commands = require('./lib/command.js');
+var util = require('./lib/util.js');
 
 var prettyPrint = false;
 
@@ -46,7 +47,7 @@ module.exports = function(options) {
         // the first padding will not add a new line
         var padding = '';
         
-        ns.forEach.json(byline(input), function(data) {
+        ns.forEach.json(util.transform(byline(input), opts), function(data) {
             var out = run(data);
             
             writeData(padding);
@@ -66,7 +67,7 @@ module.exports = function(options) {
             output.end();
         });
     } else {
-        ns.wait.json(input, function(err, data) {
+        ns.wait.json(util.transform(input, opts), function(err, data) {
             if (err) {
                 return output.emit('error', err);
             }
