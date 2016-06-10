@@ -15,6 +15,17 @@ var argv = yargs
         describe: 'Removes non-json text before the JSON object',
         alias: 'r'
     })
+    .command('echo', 'Echoes the input JSON', function(yargs) {
+        return yargs
+            .help();
+    })
+    .command('pluck', 'Gets a single property from the input JSON and prints it', function(yargs) {
+        return yargs
+            .option('attr', {
+                describe: 'The attribute to get. It can be nested, using dot notation.'
+            })
+            .help();
+    })
     .alias('help', 'h')
     .alias('h', '?')
     .help()
