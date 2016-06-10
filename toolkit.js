@@ -7,16 +7,9 @@ var byline = require('byline');
 var prettyPrint = false;
 
 var commands = {
-    pluck: require('./lib/pluck.js')
+    echo: require('./lib/echo.js'),
+    pluck: require('./lib/pluck.js'),
 };
-
-function readJson(instream, done) {
-    
-}
-
-function readMultilineJson(instream, onJson, done) {
-    
-}
 
 function printJson(obj) {
     if (prettyPrint) {
