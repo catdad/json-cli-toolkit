@@ -3,12 +3,29 @@
 var through = require('through2');
 var yargs = require('yargs');
 var argv = yargs
-    .alias('m', 'multiline')
-    .alias('p', 'pretty')
-    .alias('r', 'pretrim')
+    .option('multiline', {
+        describe: 'Read each line of the input as a separate JSON object',
+        alias: 'm'
+    })
+    .option('pretty', {
+        describe: 'Pretty-print the resulting JSON',
+        alias: 'p'
+    })
+    .option('pretrim', {
+        describe: 'Removes non-json text before the JSON object',
+        alias: 'r'
+    })
+    .alias('help', 'h')
+    .alias('h', '?')
+    .help()
     .argv;
 
 var command = argv._[0];
+
+if (!command) {
+    yargs.showHelp();
+    process.exit(1);
+}
 
 var input = through();
 var output = through();
