@@ -1,0 +1,10 @@
+{"type":"report","report":{"fullTest":{"start":27.340135,"end":40.57846,"duration":13.238325,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":45.270287,"end":49.369053,"duration":4.098765999999998,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":65.329031,"end":66.863669,"duration":1.534638000000001,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":85.443109,"end":86.905456,"duration":1.462346999999994,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":105.450534,"end":106.862902,"duration":1.4123680000000007,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":125.534268,"duration":1.366850999999997,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":146.078081,"duration":3.4713450000000137,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":165.130987,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":186.244655,"end":190.065411,"status":"success"}},"id":0}
+{"type":"report","report":{"fullTest":{"start":205.21099,"end":208.767568,"duration":3.556578000000002,"status":"success"}},"id":0}
