@@ -43,11 +43,15 @@ module.exports = function(options) {
         return runCommand(command, data, opts);
     }
     
+    function transform(stream) {
+        return util.transform(stream, opts);
+    }
+    
     if (opts.multiline) {
         // the first padding will not add a new line
         var padding = '';
         
-        ns.forEach.json(util.transform(byline(input), opts), function(data) {
+        ns.forEach.json(transform(byline(input)), function(data) {
             var out = run(data);
             
             writeData(padding);
@@ -67,7 +71,7 @@ module.exports = function(options) {
             output.end();
         });
     } else {
-        ns.wait.json(util.transform(input, opts), function(err, data) {
+        ns.wait.json(transform(input), function(err, data) {
             if (err) {
                 return output.emit('error', err);
             }
