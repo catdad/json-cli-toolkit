@@ -21,11 +21,11 @@ toolkit({
     argv: argv
 });
 
-process.stdin.pipe(input);
-output.pipe(process.stdout);
-
 handleError(input);
 handleError(output);
+
+process.stdin.pipe(input);
+output.pipe(process.stdout);
 
 function handleError(stream) {
     stream.on('error', function(err) {
