@@ -4,12 +4,9 @@ var _ = require('lodash');
 var ns = require('node-stream');
 var byline = require('byline');
 
-var prettyPrint = false;
+var commands = require('./lib/command.js');
 
-var commands = {
-    echo: require('./lib/command/echo.js'),
-    pluck: require('./lib/command/pluck.js'),
-};
+var prettyPrint = false;
 
 function printJson(obj) {
     if (prettyPrint) {
