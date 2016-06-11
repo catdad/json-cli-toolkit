@@ -1,11 +1,11 @@
 # json cli toolkit
 
-[![Build][1]][2]
-[![Test Coverage][3]][4]
-[![Code Climate][5]][6]
-[![Downloads][7]][8]
-[![Version][9]][8]
-[![Dependency Status][10]][11]
+[![Build][1]][2] 
+[![Test Coverage][3]][4] 
+[![Code Climate][5]][6] 
+[![Downloads][7]][8] 
+[![Version][9]][8] 
+[![Dependency Status][10]][11] 
 
 [1]: https://travis-ci.org/catdad/json-cli-toolkit.svg?branch=master
 [2]: https://travis-ci.org/catdad/json-cli-toolkit
