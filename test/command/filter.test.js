@@ -117,6 +117,17 @@ describe('[filter]', function() {
             
             expect(filter(OBJ, opts)).to.equal(OBJ);
         });
+        it('returns the object if the regular expression is a number', function() {
+            // since yargs will parse numbers into a number, we have to make
+            // sure that filter correctly uses that number in the regex
+            var OBJ = { one: 1 };
+            var opts = {
+                attr: 'one',
+                matches: 1
+            };
+            
+            expect(filter(OBJ, opts)).to.equal(OBJ);
+        });
 
         it('returns undefined if the property is present but doesn\'t match', function() {
             var OBJ = { not: 'pants' };
