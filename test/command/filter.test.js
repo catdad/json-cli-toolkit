@@ -2,9 +2,9 @@
 
 var expect = require('chai').expect;
 
-var find = require('../../lib/command/find.js');
+var filter = require('../../lib/command/filter.js');
 
-describe('[find]', function() {
+describe('[filter]', function() {
     
     describe('--attr', function() {
         it('return the object if a properties exist', function() {
@@ -13,7 +13,7 @@ describe('[find]', function() {
                 attr: 'example'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns the object if a nested propeties exist', function() {
             var OBJ = { nested: { prop: 12 } };
@@ -21,7 +21,7 @@ describe('[find]', function() {
                 attr: 'nested.prop'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns the object even if the property is falsy', function() {
             var OBJ = { pants: 0 };
@@ -29,7 +29,7 @@ describe('[find]', function() {
                 attr: 'pants'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns undefined if the property does not exist', function() {
             var OBJ = { not: 'pants' };
@@ -37,7 +37,7 @@ describe('[find]', function() {
                 attr: 'example'
             };
             
-            expect(find(OBJ, opts)).to.equal(undefined);
+            expect(filter(OBJ, opts)).to.equal(undefined);
         });
     });
     
@@ -49,7 +49,7 @@ describe('[find]', function() {
                 equals: 'pants'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns the object if a nested property equals a specific string', function() {
             var OBJ = { nested: { prop: 'pants' } };
@@ -58,7 +58,7 @@ describe('[find]', function() {
                 equals: 'pants'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns the object if the property is undefined and equals is "undefined"', function() {
             var OBJ = { example: 'pants' };
@@ -67,7 +67,7 @@ describe('[find]', function() {
                 equals: 'undefined'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns the object if the property is null and equals is "null"', function() {
             var OBJ = { example: null };
@@ -76,7 +76,7 @@ describe('[find]', function() {
                 equals: 'null'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         
         it('returns undefined if the property is present but not equal', function() {
@@ -86,7 +86,7 @@ describe('[find]', function() {
                 equals: 'shirts'
             };
             
-            expect(find(OBJ, opts)).to.equal(undefined);
+            expect(filter(OBJ, opts)).to.equal(undefined);
         });
         it('returns undefined if the property does not exist', function() {
             var OBJ = { not: 'pants' };
@@ -94,7 +94,7 @@ describe('[find]', function() {
                 attr: 'example'
             };
             
-            expect(find(OBJ, opts)).to.equal(undefined);
+            expect(filter(OBJ, opts)).to.equal(undefined);
         });
     });
     
@@ -106,7 +106,7 @@ describe('[find]', function() {
                 matches: '^p'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
         it('returns the object if a nested property equals a specific regular expression', function() {
             var OBJ = { nested: { prop: 'pants' } };
@@ -115,7 +115,7 @@ describe('[find]', function() {
                 matches: '^p'
             };
             
-            expect(find(OBJ, opts)).to.equal(OBJ);
+            expect(filter(OBJ, opts)).to.equal(OBJ);
         });
 
         it('returns undefined if the property is present but doesn\'t match', function() {
@@ -125,7 +125,7 @@ describe('[find]', function() {
                 matches: 'p$'
             };
             
-            expect(find(OBJ, opts)).to.equal(undefined);
+            expect(filter(OBJ, opts)).to.equal(undefined);
         });
         it('returns undefined if the property does not exist', function() {
             var OBJ = { not: 'pants' };
@@ -133,7 +133,7 @@ describe('[find]', function() {
                 attr: 'example'
             };
             
-            expect(find(OBJ, opts)).to.equal(undefined);
+            expect(filter(OBJ, opts)).to.equal(undefined);
         });
     });
 });
