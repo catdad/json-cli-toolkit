@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 
 var find = require('../../lib/command/find.js');
 
-describe.only('[find]', function() {
+describe('[find]', function() {
     
     describe('--attr', function() {
         it('return the object if a properties exist', function() {
@@ -99,6 +99,41 @@ describe.only('[find]', function() {
     });
     
     describe('--attr --matches', function() {
-        it('finds if properties match a specific regular expression');
+        it('returns the object if the property matches a specific regular expression', function() {
+            var OBJ = { example: 'pants' };
+            var opts = {
+                attr: 'example',
+                matches: '^p'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(OBJ);
+        });
+        it('returns the object if a nested property equals a specific regular expression', function() {
+            var OBJ = { nested: { prop: 'pants' } };
+            var opts = {
+                attr: 'nested.prop',
+                matches: '^p'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(OBJ);
+        });
+
+        it('returns undefined if the property is present but doesn\'t match', function() {
+            var OBJ = { not: 'pants' };
+            var opts = {
+                attr: 'not',
+                matches: 'p$'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(undefined);
+        });
+        it('returns undefined if the property does not exist', function() {
+            var OBJ = { not: 'pants' };
+            var opts = {
+                attr: 'example'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(undefined);
+        });
     });
 });
