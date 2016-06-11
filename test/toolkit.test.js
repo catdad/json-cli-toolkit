@@ -1,6 +1,7 @@
 /* jshint node: true, mocha: true */
 
 var util = require('util');
+var _ = require('lodash');
 
 var expect = require('chai').expect;
 var through = require('through2');
@@ -144,6 +145,90 @@ describe('[toolkit]', function() {
             expect(err.toString()).to.match(/SyntaxError/);
             
             done();
+        });
+    });
+    
+    describe('command:', function() {
+        function testCommand(command, opts, done) {
+            var DATA = opts.data;
+            var OUT = opts.out !== undefined ? opts.out : DATA;
+            var ERROR = !!opts.error;
+            var argv = opts.opts;
+            
+            execute({
+                command: command,
+                argv: argv
+            }, DATA, function(err, out) {
+                if (ERROR) {
+                    expect(err).to.be.instanceOf(Error);
+                    return done();
+                }
+                
+                if (err) {
+                    return done(err);
+                }
+                    
+                expect(out).to.equal(OUT);
+                
+                done();
+            });
+        }
+        
+        var commands = {
+            echo: {
+                positive: {
+                    data: JSON.stringify({ one: 1 }),
+                    opts: {}
+                },
+                negative: {
+                    data: 'not json',
+                    opts: {},
+                    error: true
+                }
+            },
+            pluck: {
+                positive: {
+                    data: JSON.stringify({ one: 'two' }),
+                    out: 'two',
+                    opts: {
+                        attr: 'one'
+                    }
+                },
+                negative: {
+                    data: JSON.stringify({ one: 'two' }),
+                    out: '',
+                    opts: {
+                        attr: 'notone'
+                    }
+                }
+            },
+            filter: {
+                positive: {
+                    data: JSON.stringify({ one: 'two' }),
+                    opts: {
+                        attr: 'one'
+                    }
+                },
+                negative: {
+                    data: JSON.stringify({ one: 'two' }),
+                    out: '',
+                    opts: {
+                        attr: 'notone'
+                    }
+                }
+            }
+        };
+        
+        _.forEach(commands, function(val, command) {
+            describe(util.format('"%s"', command), function() {
+                it('positive test', function(done) {
+                    testCommand(command, val.positive, done);
+                });
+                
+                it('negative test', function(done) {
+                    testCommand(command, val.negative, done);
+                });
+            });
         });
     });
 });

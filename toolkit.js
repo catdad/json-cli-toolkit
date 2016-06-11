@@ -7,14 +7,14 @@ var byline = require('byline');
 var commands = require('./lib/command.js');
 var util = require('./lib/util.js');
 
-var prettyPrint = false;
-
-function printJson(obj) {
-    if (prettyPrint) {
-        return JSON.stringify(obj, false, 4);
-    } else {
-        return JSON.stringify(obj);
-    }
+function printer(prettyPrint) {
+    return function printJson(obj) {
+        if (prettyPrint) {
+            return JSON.stringify(obj, false, 4);
+        } else {
+            return JSON.stringify(obj);
+        }    
+    };
 }
 
 function runCommand(command, data, opts) {
@@ -27,9 +27,8 @@ module.exports = function(options) {
     var output = options.output;
     var opts = options.argv;
     
-    if (opts.pretty) {
-        prettyPrint = true;
-    }
+    
+    var printJson = printer(opts.pretty);
     
     function writeData(data, pad) {
         if (_.isString(data)) {
