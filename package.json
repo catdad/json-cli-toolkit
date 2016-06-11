@@ -1,7 +1,7 @@
 {
   "name": "json-cli-toolkit",
   "version": "0.2.0",
-  "description": "",
+  "description": "Manipulate JSON in bash",
   "main": "index.js",
   "bin": {
     "json": "bin/cli.js"
