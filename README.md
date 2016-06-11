@@ -1,6 +1,7 @@
 # json cli toolkit
 
 [![Build][1]][2]
+[![Test Coverage][3]][4]
 [![Code Climate][5]][6]
 [![Downloads][7]][8]
 [![Version][9]][8]
@@ -8,6 +9,9 @@
 
 [1]: https://travis-ci.org/catdad/json-cli-toolkit.svg?branch=master
 [2]: https://travis-ci.org/catdad/json-cli-toolkit
+
+[3]: https://codeclimate.com/github/catdad/json-cli-toolkit/badges/coverage.svg
+[4]: https://codeclimate.com/github/catdad/json-cli-toolkit/coverage
 
 [5]: https://codeclimate.com/github/catdad/json-cli-toolkit/badges/gpa.svg
 [6]: https://codeclimate.com/github/catdad/json-cli-toolkit
