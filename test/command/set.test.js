@@ -18,6 +18,21 @@ describe('[set]', function() {
         expect(val).to.have.property('three').and.to.equal(4);
     });
     
+    it('can set nested properties', function() {
+        var OBJ = { one: 2 };
+        
+        var val = set(OBJ, {
+            attr: 'three.four',
+            value: 5
+        });
+        
+        expect(OBJ).to.equal(val);
+        expect(val).to.have.property('three')
+            .and.to.be.an('object')
+            .and.to.have.property('four')
+            .and.to.equal(5);
+    });
+    
     it('can set falsy values', function() {
         var OBJ = { one: 2 };
         
