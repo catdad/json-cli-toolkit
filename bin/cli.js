@@ -1,40 +1,13 @@
 #!/usr/bin/env node
 
 var through = require('through2');
-var yargs = require('yargs');
-var argv = yargs
-    .option('multiline', {
-        describe: 'Read each line of the input as a separate JSON object',
-        alias: 'm'
-    })
-    .option('pretty', {
-        describe: 'Pretty-print the resulting JSON',
-        alias: 'p'
-    })
-    .option('pretrim', {
-        describe: 'Removes non-json text before the JSON object',
-        alias: 'r'
-    })
-    .command('echo', 'Echoes the input JSON', function(yargs) {
-        return yargs
-            .help();
-    })
-    .command('pluck', 'Gets a single property from the input JSON and prints it', function(yargs) {
-        return yargs
-            .option('attr', {
-                describe: 'The attribute to get. It can be nested, using dot notation.'
-            })
-            .help();
-    })
-    .alias('help', 'h')
-    .alias('h', '?')
-    .help()
-    .argv;
+
+var argv = require('../lib/argv.js');
 
 var command = argv._[0];
 
 if (!command) {
-    yargs.showHelp();
+    argv._yargs.showHelp();
     process.exit(1);
 }
 
