@@ -42,11 +42,60 @@ describe.only('[find]', function() {
     });
     
     describe('--attr --equals', function() {
-        it('finds if properties equals a specific string', function() {
+        it('returns the object if property equals a specific string', function() {
+            var OBJ = { example: 'pants' };
+            var opts = {
+                attr: 'example',
+                equals: 'pants'
+            };
             
+            expect(find(OBJ, opts)).to.equal(OBJ);
         });
-        it('finds if properties are undefined');
-        it('finds if properties are null');
+        it('returns the object if a nested property equals a specific string', function() {
+            var OBJ = { nested: { prop: 'pants' } };
+            var opts = {
+                attr: 'nested.prop',
+                equals: 'pants'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(OBJ);
+        });
+        it('returns the object if the property is undefined and equals is "undefined"', function() {
+            var OBJ = { example: 'pants' };
+            var opts = {
+                attr: 'not',
+                equals: 'undefined'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(OBJ);
+        });
+        it('returns the object if the property is null and equals is "null"', function() {
+            var OBJ = { example: null };
+            var opts = {
+                attr: 'example',
+                equals: 'null'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(OBJ);
+        });
+        
+        it('returns undefined if the property is present but not equal', function() {
+            var OBJ = { not: 'pants' };
+            var opts = {
+                attr: 'not',
+                equals: 'shirts'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(undefined);
+        });
+        it('returns undefined if the property does not exist', function() {
+            var OBJ = { not: 'pants' };
+            var opts = {
+                attr: 'example'
+            };
+            
+            expect(find(OBJ, opts)).to.equal(undefined);
+        });
     });
     
     describe('--attr --matches', function() {
