@@ -11,6 +11,8 @@ if (!command) {
     process.exit(1);
 }
 
+// All streams used in the tool will be through stream,
+// it just makes everything easier.
 var input = through();
 var output = through();
 
@@ -23,9 +25,12 @@ toolkit({
     argv: argv
 });
 
+// Handle all the errors
 handleError(input);
 handleError(output);
 
+// Pipe the through stream to the actual console
+// input and output.
 process.stdin.pipe(input);
 output.pipe(process.stdout);
 
