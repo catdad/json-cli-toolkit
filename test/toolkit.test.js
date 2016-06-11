@@ -90,7 +90,7 @@ describe('[toolkit]', function() {
                 return done(err);
             }
             
-            expect(data).to.equal(util.format('%s\n%s\n', 'json', 'pants'));
+            expect(data).to.equal(util.format('%s\n%s', 'json', 'pants'));
             done();
         });
     });

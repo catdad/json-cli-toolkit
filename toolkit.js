@@ -49,20 +49,19 @@ module.exports = function(options) {
     
     if (opts.multiline) {
         // the first padding will not add a new line
-        var padding = '';
+        var first = true;
         
         ns.forEach.json(transform(byline(input)), function(data) {
             var out = run(data);
             
-            writeData(padding);
-            writeData(out);
-            
-            // set the padding for the following data
-            if (out !== undefined) {
-                padding = '\n';
-            } else {
-                padding = '';
+            if (out !== undefined && first) {
+                // skip padding with a new line
+                first = false;
+            } else if (out !== undefined) {
+                writeData('\n');
             }
+            
+            writeData(out);
         }, function(err) {
             if (err) {
                 return output.emit('error', err);
