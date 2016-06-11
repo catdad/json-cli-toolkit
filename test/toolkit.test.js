@@ -216,6 +216,22 @@ describe('[toolkit]', function() {
                         attr: 'notone'
                     }
                 }
+            },
+            set: {
+                positive: {
+                    data: '{}',
+                    out: JSON.stringify({ one: 2 }),
+                    opts: {
+                        attr: 'one',
+                        value: 2
+                    }
+                },
+                negative: {
+                    data: '{}',
+                    opts: {
+                        attr: 'one'
+                    }
+                }
             }
         };
         
