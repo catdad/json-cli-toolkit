@@ -43,7 +43,7 @@ describe('[toolkit]', function() {
                 return done(err);
             }
             
-            expect(data).to.equal(DATA);
+            expect(data).to.equal(DATA + '\n');
             done();
         });
     });
@@ -66,7 +66,7 @@ describe('[toolkit]', function() {
                 return done(err);
             }
             
-            expect(data).to.equal(DATA);
+            expect(data).to.equal(DATA + '\n');
             done();
         });
     });
@@ -91,7 +91,7 @@ describe('[toolkit]', function() {
                 return done(err);
             }
             
-            expect(data).to.equal(util.format('%s\n%s', 'json', 'pants'));
+            expect(data).to.equal(util.format('%s\n%s\n', 'json', 'pants'));
             done();
         });
     });
@@ -109,7 +109,7 @@ describe('[toolkit]', function() {
                 return done(err);
             }
             
-            expect(data).to.equal(JSON.stringify(DATA, false, 4));
+            expect(data).to.equal(JSON.stringify(DATA, false, 4) + '\n');
             done();
         });
     });
@@ -167,8 +167,9 @@ describe('[toolkit]', function() {
                 if (err) {
                     return done(err);
                 }
-                    
-                expect(out).to.equal(OUT);
+                
+                // there should always be a new line at the end
+                expect(out).to.equal(OUT + '\n');
                 
                 done();
             });
