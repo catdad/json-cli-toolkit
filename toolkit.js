@@ -66,7 +66,7 @@ module.exports = function(options) {
                 return output.emit('error', err);
             }
             
-            output.end();
+            output.end('\n');
         });
     } else {
         ns.wait.json(transform(input), function(err, data) {
@@ -75,7 +75,7 @@ module.exports = function(options) {
             }
             
             writeData(run(data));
-            output.end();
+            output.end('\n');
         });
     }
 };
