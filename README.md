@@ -22,3 +22,76 @@
 
 [10]: https://david-dm.org/catdad/json-cli-toolkit.svg
 [11]: https://david-dm.org/catdad/json-cli-toolkit
+
+## Install
+
+Install globally so that the CLI is placed in your path.
+
+```bash
+npm install -g json
+```
+
+## Use
+
+`json --help` is your friend.
+
+* Common options
+  * [`ignore`](#ignore)
+  * [`multiline`](#multiline)
+  * [`pretrim`](#pretrim)
+  * [`pretty`](#pretty)
+* Commands
+  * [`echo`](#echo)
+  * [`filter`](#filter)
+  * [`pluck`](#pluck)
+  * [`set`](#set)
+
+### Common options
+
+<a name="ignore"></a>
+#### ignore
+
+Ignore input that is not json. By default, `json` will error for parsing errors.
+
+`json --ignore`
+`json -i`
+
+<a name="multiline"></a>
+#### multiline
+
+Read multiline input as one json object per line.
+
+`json --multiline`
+`json -m`
+
+<a name="pretrim"></a>
+#### pretrim
+
+Remove non-json content from the beginning of the input.
+
+`json --pretrim`
+`json -r`
+
+<a name="pretty"></a>
+#### pretty
+
+Pretty-print the json output.
+
+`json --pretty`
+`json -p`
+
+### Commands
+
+<a name="echo"></a>
+#### `json echo`
+
+Prints the input json to the output.
+
+<a name="filter"></a>
+#### `json filter`
+
+<a name="pluck"></a>
+#### `json pluck`
+
+<a name="set"></a>
+#### `json set`
