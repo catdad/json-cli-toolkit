@@ -94,6 +94,12 @@ Pretty-print the json output.
 
 ### Commands
 
+All commands have help in the CLI. You can access it as such:
+
+```bash
+json <command> --help
+```
+
 <a name="echo"></a>
 #### `json echo`
 
@@ -101,9 +107,10 @@ Prints the input json to the output.
 
 **Examples:**
 
-`json echo`
-
-`json echo --pretty`
+```bash
+json echo
+json echo --pretty
+```
 
 <a name="filter"></a>
 #### `json filter`
@@ -118,9 +125,10 @@ Filters only entires that match specific rules:
 
 **Examples:**
 
-`json filter --attr propname --equals muffins`
-
-`json filter --attr nested.prop --matches ^[0-9]{3,}`
+```bash
+json filter --attr propname --equals muffins
+json filter --attr nested.prop --matches ^[0-9]{3,}
+```
 
 <a name="pluck"></a>
 #### `json pluck`
@@ -131,9 +139,10 @@ Gets a value from the json object and prints it to output.
 
 **Examples:**
 
-`json pluck --attr propname`
-
-`json pluck --attr nested.prop`
+```bash
+json pluck --attr propname
+json pluck --attr nested.prop
+```
 
 <a name="set"></a>
 #### `json set`
@@ -146,6 +155,7 @@ Set a particular value in the json object.
 
 **Examples:**
 
-`json set --attr propname --value muffins`
-
-`json set --attr nested.prop --value pineapples`
+```bash
+json set --attr propname --value muffins
+json set --attr nested.prop --value pineapples
+```
