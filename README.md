@@ -53,6 +53,8 @@ npm install -g json
 
 Ignore input that is not json. By default, `json` will error for parsing errors.
 
+**Examples:**
+
 `json --ignore`
 
 `json -i`
@@ -61,6 +63,8 @@ Ignore input that is not json. By default, `json` will error for parsing errors.
 #### multiline
 
 Read multiline input as one json object per line.
+
+**Examples:**
 
 `json --multiline`
 
@@ -71,6 +75,8 @@ Read multiline input as one json object per line.
 
 Remove non-json content from the beginning of the input.
 
+**Examples:**
+
 `json --pretrim`
 
 `json -r`
@@ -79,6 +85,8 @@ Remove non-json content from the beginning of the input.
 #### pretty
 
 Pretty-print the json output.
+
+**Examples:**
 
 `json --pretty`
 
@@ -91,6 +99,12 @@ Pretty-print the json output.
 
 Prints the input json to the output.
 
+**Examples:**
+
+`json echo`
+
+`json echo --pretty`
+
 <a name="filter"></a>
 #### `json filter`
 
@@ -102,7 +116,7 @@ Filters only entires that match specific rules:
 
 `--matches`: Optional, used with `attr`. the entry will appear in the output only if the `attr` property value matches the regular expression defined in this flag.
 
-Examples:
+**Examples:**
 
 `json filter --attr propname --equals muffins`
 
@@ -115,7 +129,7 @@ Gets a value from the json object and prints it to output.
 
 `--attr`: The property to get. Nested properties can be accessed through dot notation.
 
-Examples:
+**Examples:**
 
 `json pluck --attr propname`
 
@@ -130,7 +144,7 @@ Set a particular value in the json object.
 
 `--value`: The value to set to the prrperty.
 
-Examples:
+**Examples:**
 
 `json set --attr propname --value muffins`
 
