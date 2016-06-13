@@ -42,6 +42,7 @@ npm install -g json
   * [`pretty`](#pretty)
 * Commands
   * [`echo`](#echo)
+  * [`exec`](#exec)
   * [`filter`](#filter)
   * [`pluck`](#pluck)
   * [`set`](#set)
@@ -110,6 +111,26 @@ Prints the input json to the output.
 ```bash
 json echo
 json echo --pretty
+```
+
+<a name="exec"></a>
+#### `json exec`
+
+Use arbitrary JavaScript to transform or filter the input json:
+
+`--code`: The code to execute. This code will have a global `obj` object, which is the JSON being treated. This code will be called multiple times if running in `--multiline`. You can modify this object as you like, and the result will be used for the output. Setting `obj` to `undefined` will filter the json object out of the output. For convenience, this code will also have access to `lodash` as a global `_` variable, like you might expect.
+
+**Examples:**
+
+```bash
+# Add a new property
+json exec --code "obj.newProp = obj.one + obj.two"
+
+# Filter out some input
+json exec --multiline --code "if (obj.name !== 'thing') obj = undefined"
+
+# Help on using `exec`
+json exec --help
 ```
 
 <a name="filter"></a>
