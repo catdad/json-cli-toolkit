@@ -8,7 +8,7 @@ describe('[exec]', function() {
     it('executes arbitrary transform javascript', function() {
         var data = { example: 'pants' };
         var opts = {
-            exec: 'obj.example = "shirts"'
+            code: 'obj.example = "shirts"'
         };
         
         var val = exec(data, opts);
@@ -20,7 +20,7 @@ describe('[exec]', function() {
     
     it('can completely modify the "obj" object', function() {
         var opts = {
-            exec: 'obj = "something different"'
+            code: 'obj = "something different"'
         };
         
         var val = exec({}, opts);
@@ -31,7 +31,7 @@ describe('[exec]', function() {
     it('has access to lodash', function() {
         var data = { one: 1, two: 2 };
         var opts = {
-            exec: 'obj = _.map(obj, function(v) { return v })'
+            code: 'obj = _.map(obj, function(v) { return v })'
         };
         
         var val = exec(data, opts);
@@ -42,7 +42,7 @@ describe('[exec]', function() {
     it('can do many modifications', function() {
         var data = { example: 'pants' };
         var opts = {
-            exec: 'obj.example = "shirts"; obj.thing = "stuff"'
+            code: 'obj.example = "shirts"; obj.thing = "stuff"'
         };
         
         var val = exec(data, opts);
