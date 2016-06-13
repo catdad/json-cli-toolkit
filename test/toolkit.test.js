@@ -233,6 +233,22 @@ describe('[toolkit]', function() {
                         attr: 'one'
                     }
                 }
+            },
+            exec: {
+                positive: {
+                    data: '{}',
+                    out: JSON.stringify({ one: 2 }),
+                    opts: {
+                        code: 'obj.one = 2'
+                    }
+                },
+                negative: {
+                    data: '{}',
+                    out: '',
+                    opts: {
+                        code: 'obj = undefined'
+                    }
+                }
             }
         };
         
