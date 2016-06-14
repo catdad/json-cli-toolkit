@@ -130,9 +130,6 @@ json exec --code "obj.newProp = obj.one + obj.two"
 
 # Filter out some input
 json exec --multiline --code "if (obj.name !== 'thing') obj = undefined"
-
-# Help on using `exec`
-json exec --help
 ```
 
 <a name="filter"></a>
