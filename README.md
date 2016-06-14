@@ -28,8 +28,10 @@
 Install globally so that the CLI is placed in your path.
 
 ```bash
-npm install -g json
+npm install -g json-cli-toolkit
 ```
+
+This will expose the command `json` in your path.
 
 ## Use
 
