@@ -52,13 +52,13 @@ describe('[filter]', function() {
         testList.forEach(function(desc) {
             defaultTests.push(function() {
                 it('returns ' + desc.msg, function() {
-                    test(desc.obj, desc.opts, desc.default);
+                    test(desc.obj, desc.opts, desc.succeed);
                 });
             });
             
             notTests.push(function() {
                 it('does not return ' + desc.msg, function() {
-                    notTest(desc.obj, desc.opts, desc.default);
+                    notTest(desc.obj, desc.opts, desc.succeed);
                 });
             });
         });
@@ -67,133 +67,87 @@ describe('[filter]', function() {
     }
     
     describe('--attr', function() {
+        
         createTests([{
             obj: { example: 'pants' },
             opts: { attr: 'example' },
-            default: true,
+            succeed: true,
             msg: 'the object if a properties exist'
         }, {
             obj: { nested: { prop: 12 } },
             opts: { attr: 'nested.prop' },
-            default: true,
+            succeed: true,
             msg: 'the object if a nested propeties exist'
         }, {
             obj: { pants: 0 },
             opts: { attr: 'pants' },
-            default: true,
+            succeed: true,
             msg: 'the object even if the property is falsy'
         }, {
             obj: { not: 'pants' },
             opts: { attr: 'example' },
-            default: false,
+            succeed: false,
             msg: 'undefined if the property does not exist'
         }]);
+        
     });
     
     describe('--attr --equals', function() {
-        it('returns the object if property equals a specific string', function() {
-            var OBJ = { example: 'pants' };
-            var opts = {
-                attr: 'example',
-                equals: 'pants'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object if a nested property equals a specific string', function() {
-            var OBJ = { nested: { prop: 'pants' } };
-            var opts = {
-                attr: 'nested.prop',
-                equals: 'pants'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object if the property is undefined and equals is "undefined"', function() {
-            var OBJ = { example: 'pants' };
-            var opts = {
-                attr: 'not',
-                equals: 'undefined'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object if the property is null and equals is "null"', function() {
-            var OBJ = { example: null };
-            var opts = {
-                attr: 'example',
-                equals: 'null'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
         
-        it('returns undefined if the property is present but not equal', function() {
-            var OBJ = { not: 'pants' };
-            var opts = {
-                attr: 'not',
-                equals: 'shirts'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(undefined);
-        });
-        it('returns undefined if the property does not exist', function() {
-            var OBJ = { not: 'pants' };
-            var opts = {
-                attr: 'example'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(undefined);
-        });
+        createTests([{
+            obj: { example: 'pants' },
+            opts: { attr: 'example', equals: 'pants' },
+            succeed: true,
+            msg: 'the object if property equals a specific string'
+        }, {
+            obj: { nested: { prop: 'pants' } },
+            opts: { attr: 'nested.prop', equals: 'pants' },
+            succeed: true,
+            msg: 'the object if a nested property equals a specific string'
+        }, {
+            obj: { example: 'pants' },
+            opts: { attr: 'not', equals: 'undefined' },
+            succeed: true,
+            msg: 'the object if the property is undefined and equals is "undefined"'
+        }, {
+            obj: { example: null },
+            opts: { attr: 'example', equals: 'null' },
+            succeed: true,
+            msg: 'the object if the property is null and equals is "null"'
+        }, {
+            obj: { not: 'pants' },
+            opts: { attr: 'not', equals: 'shirts' },
+            succeed: false,
+            msg: 'undefined if the property is present but not equal'
+        }]);
+
     });
     
     describe('--attr --matches', function() {
-        it('returns the object if the property matches a specific regular expression', function() {
-            var OBJ = { example: 'pants' };
-            var opts = {
-                attr: 'example',
-                matches: '^p'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object if a nested property equals a specific regular expression', function() {
-            var OBJ = { nested: { prop: 'pants' } };
-            var opts = {
-                attr: 'nested.prop',
-                matches: '^p'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object if the regular expression is a number', function() {
+        
+        createTests([{
+            obj: { example: 'pants' },
+            opts: { attr: 'example', matches: '^p' },
+            succeed: true,
+            msg: 'the object if the property matches a specific regular expression'
+        }, {
+            obj: { nested: { prop: 'pants' } },
+            opts: { attr: 'nested.prop', matches: '^p' },
+            succeed: true,
+            msg: 'the object if a nested property equals a specific regular expression'
+        }, {
             // since yargs will parse numbers into a number, we have to make
             // sure that filter correctly uses that number in the regex
-            var OBJ = { one: 1 };
-            var opts = {
-                attr: 'one',
-                matches: 1
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-
-        it('returns undefined if the property is present but doesn\'t match', function() {
-            var OBJ = { not: 'pants' };
-            var opts = {
-                attr: 'not',
-                matches: 'p$'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(undefined);
-        });
-        it('returns undefined if the property does not exist', function() {
-            var OBJ = { not: 'pants' };
-            var opts = {
-                attr: 'example'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(undefined);
-        });
+            obj: { one: 1 },
+            opts: { attr: 'one', matches: 1 },
+            succeed: true,
+            msg: 'the object if the regular expression is a number'
+        }, {
+            obj: { not: 'pants' },
+            opts: { attr: 'not', matches: 'p$' },
+            succeed: false,
+            msg: 'undefined if the property is present but doesn\'t match'
+        }]);
+        
     });
 });
