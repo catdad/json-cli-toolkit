@@ -1,44 +1,93 @@
 /* jshint node: true, mocha: true */
 
 var expect = require('chai').expect;
+var _ = require('lodash');
 
 var filter = require('../../lib/command/filter.js');
 
 describe('[filter]', function() {
     
+    function test(OBJ, opts, succeed) {
+        var val = filter(OBJ, opts);
+        
+        if (succeed) {
+            expect(val).to.equal(OBJ);
+        } else {
+            expect(val).to.equal(undefined);
+        }
+    }
+    
+    function notTest(OBJ, opts, succeed) {
+        var clone = _.cloneDeep(opts);
+        clone.not = true;
+        
+        var val = filter(OBJ, clone);
+        
+        // `succeed` tells us that the original options,
+        // before adding the `not` were expected to
+        // succeed
+        if (succeed) {
+            expect(val).to.not.equal(OBJ);
+        } else {
+            expect(val).to.equal(OBJ);
+        }
+    }
+    
+    function runTests(defaultTests, notTests) {
+        defaultTests.forEach(function(func) {
+            func();
+        });
+        
+        describe('--not', function() {
+            notTests.forEach(function(func) {
+                func();
+            });
+        });
+    }
+    
+    function createTests(testList) {
+        var defaultTests = [];
+        var notTests = [];
+        
+        testList.forEach(function(desc) {
+            defaultTests.push(function() {
+                it('returns ' + desc.msg, function() {
+                    test(desc.obj, desc.opts, desc.default);
+                });
+            });
+            
+            notTests.push(function() {
+                it('does not return ' + desc.msg, function() {
+                    notTest(desc.obj, desc.opts, desc.default);
+                });
+            });
+        });
+        
+        runTests(defaultTests, notTests);
+    }
+    
     describe('--attr', function() {
-        it('return the object if a properties exist', function() {
-            var OBJ = { example: 'pants' };
-            var opts = {
-                attr: 'example'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object if a nested propeties exist', function() {
-            var OBJ = { nested: { prop: 12 } };
-            var opts = {
-                attr: 'nested.prop'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns the object even if the property is falsy', function() {
-            var OBJ = { pants: 0 };
-            var opts = {
-                attr: 'pants'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(OBJ);
-        });
-        it('returns undefined if the property does not exist', function() {
-            var OBJ = { not: 'pants' };
-            var opts = {
-                attr: 'example'
-            };
-            
-            expect(filter(OBJ, opts)).to.equal(undefined);
-        });
+        createTests([{
+            obj: { example: 'pants' },
+            opts: { attr: 'example' },
+            default: true,
+            msg: 'the object if a properties exist'
+        }, {
+            obj: { nested: { prop: 12 } },
+            opts: { attr: 'nested.prop' },
+            default: true,
+            msg: 'the object if a nested propeties exist'
+        }, {
+            obj: { pants: 0 },
+            opts: { attr: 'pants' },
+            default: true,
+            msg: 'the object even if the property is falsy'
+        }, {
+            obj: { not: 'pants' },
+            opts: { attr: 'example' },
+            default: false,
+            msg: 'undefined if the property does not exist'
+        }]);
     });
     
     describe('--attr --equals', function() {
