@@ -141,13 +141,16 @@ Filters only entires that match specific rules:
 
 `--equals`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value equals the value of this flag.
 
-`--matches`: Optional, used with `attr`. the entry will appear in the output only if the `attr` property value matches the regular expression defined in this flag.
+`--matches`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value matches the regular expression defined in this flag.
+
+`--not`: Optional, used with any of the other flags. It will flip the comparison resulting from the other flags being used.
 
 **Examples:**
 
 ```bash
 json filter --attr propname --equals muffins
 json filter --attr nested.prop --matches ^[0-9]{3,}
+json filter --attr propname --not --equals poptarts
 ```
 
 <a name="pluck"></a>
