@@ -6,7 +6,7 @@ var _ = require('lodash');
 var set = require('../../lib/command/set.js');
 
 describe('[set]', function() {
-    it('returns the object with a new valu set', function() {
+    it('returns the object with a new value set', function() {
         var OBJ = { one: 2 };
         
         var val = set(OBJ, {
