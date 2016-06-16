@@ -43,6 +43,7 @@ This will expose the command `json` in your path.
   * [`pretrim`](#pretrim)
   * [`pretty`](#pretty)
 * Commands
+  * [`delete`](#delete)
   * [`echo`](#echo)
   * [`exec`](#exec)
   * [`filter`](#filter)
@@ -101,6 +102,20 @@ All commands have help in the CLI. You can access it as such:
 
 ```bash
 json <command> --help
+```
+
+<a name="delete"></a>
+#### `json delete`
+
+Remove a particular value from the json.
+
+`--attr`: The property to remove. Nested properties can be set using dot notation.
+
+**Examples:**
+
+```bash
+json delete --attr propname
+json delete --attr nested.prop
 ```
 
 <a name="echo"></a>
