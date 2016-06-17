@@ -45,6 +45,34 @@ describe('[set]', function() {
         expect(val).to.have.property('three').and.to.equal(false);
     });
     
+    it('can increment a value by using the shared options', function() {
+        var opts = {
+            attr: 'one',
+            inc: 0
+        };
+        var OBJ = {};
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(0);
+        expect(opts.inc).to.equal(1);
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(1);
+        expect(opts.inc).to.equal(2);
+    });
+    
+    it('can decrement a value by using the shared options', function() {
+        var opts = {
+            attr: 'one',
+            dec: 0
+        };
+        var OBJ = {};
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(0);
+        expect(opts.dec).to.equal(-1);
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(-1);
+        expect(opts.dec).to.equal(-2);
+    });
+    
     it('transforms the string "null" to the value null', function() {
         var OBJ = { one: 2 };
         
