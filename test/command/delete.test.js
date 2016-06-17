@@ -41,6 +41,23 @@ describe('[delete]', function() {
         expect(val).to.not.have.property('two');
     });
     
+    it('can delete multiple properties at once', function() {
+        var OBJ = {
+            one: 2,
+            three: 4,
+            five: 6
+        };
+        
+        var val = del(OBJ, {
+            attr: ['one', 'three']
+        });
+        
+        expect(val).to.equal(OBJ);
+        expect(val).to.deep.equal({
+            five: 6
+        });
+    });
+    
     it('returns the object unmodified if attr does not exist', function() {
         var OBJ = { one: 2 };
         var CLONE = _.clone(OBJ);
