@@ -116,6 +116,9 @@ Remove a particular property and its value from the json.
 ```bash
 json delete --attr propname
 json delete --attr nested.prop
+
+# Delete multiple properties at the same time
+json delete --attr one --attr two
 ```
 
 <a name="echo"></a>
