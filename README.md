@@ -107,7 +107,7 @@ json <command> --help
 <a name="delete"></a>
 #### `json delete`
 
-Remove a particular value from the json.
+Remove a particular property and its value from the json.
 
 `--attr`: The property to remove. Nested properties can be set using dot notation.
 
@@ -121,7 +121,7 @@ json delete --attr nested.prop
 <a name="echo"></a>
 #### `json echo`
 
-Prints the input json to the output.
+Print the input json to the output.
 
 **Examples:**
 
@@ -135,7 +135,9 @@ json echo --pretty
 
 Use arbitrary JavaScript to transform or filter the input json:
 
-`--code`: The code to execute. This code will have a global `obj` object, which is the JSON being treated. This code will be called multiple times if running in `--multiline`. You can modify this object as you like, and the result will be used for the output. Setting `obj` to `undefined` will filter the json object out of the output. For convenience, this code will also have access to `lodash` as a global `_` variable, like you might expect.
+`--code`: The code to execute. This code will have a global `obj` object, which is the JSON being treated. This code will be called multiple times if running in.
+
+`--multiline`. You can modify this object as you like, and the result will be used for the output. Setting `obj` to `undefined` will filter the json object out of the output. For convenience, this code will also have access to `lodash` as a global `_` variable, like you might expect.
 
 **Examples:**
 
@@ -150,9 +152,9 @@ json exec --multiline --code "if (obj.name !== 'thing') obj = undefined"
 <a name="filter"></a>
 #### `json filter`
 
-Filters only entires that match specific rules:
+Filter only json input entries that match specific rules:
 
-`--attr`: The property to use in order to filter entires. If this flag is used alone, the existence of a value for this property will be treated as truthy and the entry will appear in the output. Nested properties can be accessed through dot notation.
+`--attr`: The property to use in order to filter entries. If this flag is used alone, the existence of a value for this property will be treated as truthy, causing the entry will appear in the output. Nested properties can be accessed through dot notation.
 
 `--equals`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value equals the value of this flag.
 
@@ -171,7 +173,7 @@ json filter --attr propname --not --equals poptarts
 <a name="pluck"></a>
 #### `json pluck`
 
-Gets a value from the json object and prints it to output.
+Get a value from the json object and print it to output.
 
 `--attr`: The property to get. Nested properties can be accessed through dot notation.
 
@@ -189,7 +191,7 @@ Set a particular value in the json object.
 
 `--attr`: The property to set. Nested properties can be set using dot notation.
 
-`--value`: The value to set to the prrperty.
+`--value`: The value to set to the property.
 
 **Examples:**
 
