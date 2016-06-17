@@ -48,29 +48,70 @@ describe('[set]', function() {
     it('can increment a value by using the shared options', function() {
         var opts = {
             attr: 'one',
-            inc: 0
+            value: 0,
+            inc: 1
         };
         var OBJ = {};
         
         expect(set({}, opts)).to.have.property('one').and.to.equal(0);
-        expect(opts.inc).to.equal(1);
+        expect(opts.value).to.equal(1);
         
         expect(set({}, opts)).to.have.property('one').and.to.equal(1);
-        expect(opts.inc).to.equal(2);
+        expect(opts.value).to.equal(2);
     });
     
-    it('can decrement a value by using the shared options', function() {
+    it('can decrement using a negative value', function() {
         var opts = {
             attr: 'one',
-            dec: 0
+            value: 0,
+            inc: -1
         };
         var OBJ = {};
         
         expect(set({}, opts)).to.have.property('one').and.to.equal(0);
-        expect(opts.dec).to.equal(-1);
+        expect(opts.value).to.equal(-1);
         
         expect(set({}, opts)).to.have.property('one').and.to.equal(-1);
-        expect(opts.dec).to.equal(-2);
+        expect(opts.value).to.equal(-2);
+    });
+    
+    it('can increment using `true` as the inc flag', function() {
+        var opts = {
+            attr: 'one',
+            value: 0,
+            inc: true
+        };
+        var OBJ = {};
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(0);
+        expect(opts.value).to.equal(1);
+        expect(opts.inc).to.equal(1);
+    });
+    
+    it('will not increment for falsy inc values', function() {
+        var opts = {
+            attr: 'one',
+            value: 0,
+            inc: false
+        };
+        var OBJ = {};
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(0);
+        expect(opts.value).to.equal(0);
+        expect(opts.inc).to.equal(0);
+    });
+    
+    it('will increment by 1 for non-number inc values', function() {
+        var opts = {
+            attr: 'one',
+            value: 0,
+            inc: 'fudge'
+        };
+        var OBJ = {};
+        
+        expect(set({}, opts)).to.have.property('one').and.to.equal(0);
+        expect(opts.value).to.equal(1);
+        expect(opts.inc).to.equal(1);
     });
     
     it('transforms the string "null" to the value null', function() {
