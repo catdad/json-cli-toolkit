@@ -194,6 +194,8 @@ Set a particular value in the json object.
 
 `--attr`: The property to set. Nested properties can be set using dot notation.
 
+`--inc`: When set, the `value` will be incremented by the value set in this flag each time that a new json object is read in multiline mode.
+
 `--value`: The value to set to the property.
 
 **Examples:**
@@ -201,4 +203,10 @@ Set a particular value in the json object.
 ```bash
 json set --attr propname --value muffins
 json set --attr nested.prop --value pineapples
+
+# Increment the value being set by 1 each time
+json set --multiline --attr count --value 1 --inc
+
+# Decrement the value being set by 5 each time
+json set --multiline --attr fiveLess --value 0 --inc -5
 ```
