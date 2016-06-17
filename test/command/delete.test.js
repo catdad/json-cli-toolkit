@@ -13,7 +13,7 @@ describe('[delete]', function() {
             attr: 'three'
         });
         
-        expect(OBJ).to.equal(val);
+        expect(val).to.equal(OBJ);
         expect(val).to.not.have.property('three');
     });
     
@@ -24,7 +24,7 @@ describe('[delete]', function() {
             attr: 'three.four'
         });
         
-        expect(OBJ).to.equal(val);
+        expect(val).to.equal(OBJ);
         expect(val).to.have.property('three')
             .and.to.be.an('object')
             .and.to.not.have.property('four');
@@ -37,7 +37,7 @@ describe('[delete]', function() {
             attr: 'two'
         });
         
-        expect(OBJ).to.equal(val);
+        expect(val).to.equal(OBJ);
         expect(val).to.not.have.property('two');
     });
     
