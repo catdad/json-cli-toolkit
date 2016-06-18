@@ -49,6 +49,7 @@ This will expose the command `json` in your path.
   * [`filter`](#filter)
   * [`pluck`](#pluck)
   * [`set`](#set)
+  * [`wrap`](#wrap)
 
 ### Common options
 
@@ -209,4 +210,18 @@ json set --multiline --attr count --value 1 --inc
 
 # Decrement the value being set by 5 each time
 json set --multiline --attr fiveLess --value 0 --inc -5
+```
+
+<a name="wrap"></a>
+#### `json wrap`
+
+Wrap the input json in a new object at a defined path.
+
+`--attr`: The property to which to assing the input json. Nested properties can be assigned using dot notation.
+
+**Examples:**
+
+``bash
+json wrap --attr propname
+json wrap --attr nested.prop
 ```
