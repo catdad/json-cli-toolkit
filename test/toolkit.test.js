@@ -294,6 +294,21 @@ describe('[toolkit]', function() {
                         code: 'obj = undefined'
                     }
                 }
+            },
+            wrap: {
+                positive: {
+                    data: '{}',
+                    out: JSON.stringify({ name: {} }),
+                    opts: {
+                        attr: 'name'
+                    }
+                },
+                // what is a negative test here?
+                negative: {
+                    data: '{}',
+                    out: JSON.stringify({ 'undefined': {} }),
+                    opts: {}
+                }
             }
         };
         
