@@ -25,6 +25,10 @@ function runCommand(command, data, opts) {
     return commands[command](data, opts);
 }
 
+function emitAsync(stream, event, data) {
+    setImmediate(stream.emit.bind(stream), event, data);
+}
+
 module.exports = function(options) {
     var command = options.command;
     var input = options.input;
@@ -32,7 +36,9 @@ module.exports = function(options) {
     var opts = options.argv;
     
     if (!validateCommand(command)) {
-        return output.emit('error', new Error('"' + command + '" is not a known command'));
+        // make sure this is async, because sometimes people call
+        // a command before registering error handlers on it
+        return emitAsync(output, 'error', new Error('"' + command + '" is not a known command'));
     }
     
     var printJson = printer(opts.pretty);

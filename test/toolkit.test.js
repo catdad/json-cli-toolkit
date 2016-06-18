@@ -148,6 +148,20 @@ describe('[toolkit]', function() {
         });
     });
     
+    it('errors if the command is not known', function(done) {
+        var DATA = '{}';
+        
+        execute({
+            command: 'fudge',
+            argv: {}
+        }, DATA, function(err, data) {
+            expect(err).to.be.instanceOf(Error);
+            expect(err.message).to.equal('"fudge" is not a known command');
+            
+            done();
+        });
+    });
+    
     describe('command:', function() {
         function testCommand(command, opts, done) {
             var DATA = opts.data;
