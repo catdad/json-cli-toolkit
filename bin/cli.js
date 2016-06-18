@@ -11,19 +11,12 @@ if (!command) {
     process.exit(1);
 }
 
+var toolkit = require('../toolkit.js');
+
 // All streams used in the tool will be through stream,
 // it just makes everything easier.
 var input = through();
 var output = through();
-
-var toolkit = require('../toolkit.js');
-
-toolkit({
-    input: input,
-    output: output,
-    command: command,
-    argv: argv
-});
 
 // Handle all the errors
 handleError(input);
@@ -33,6 +26,13 @@ handleError(output);
 // input and output.
 process.stdin.pipe(input);
 output.pipe(process.stdout);
+
+toolkit({
+    input: input,
+    output: output,
+    command: command,
+    argv: argv
+});
 
 function handleError(stream) {
     stream.on('error', function(err) {

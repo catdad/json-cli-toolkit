@@ -17,6 +17,10 @@ function printer(prettyPrint) {
     };
 }
 
+function validateCommand(command) {
+    return !!commands[command];
+}
+
 function runCommand(command, data, opts) {
     return commands[command](data, opts);
 }
@@ -27,6 +31,9 @@ module.exports = function(options) {
     var output = options.output;
     var opts = options.argv;
     
+    if (!validateCommand(command)) {
+        return output.emit('error', new Error('"' + command + '" is not a known command'));
+    }
     
     var printJson = printer(opts.pretty);
     
