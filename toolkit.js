@@ -59,36 +59,68 @@ module.exports = function(options) {
         return util.transform(stream, opts);
     }
     
-    if (opts.multiline) {
-        // the first padding will not add a new line
-        var first = true;
+    function itterate(onData, onEnd) {
         
-        ns.forEach.json(transform(byline(input)), function(data) {
-            var out = run(data);
-            
-            if (out !== undefined && first) {
-                // skip padding with a new line
-                first = false;
-            } else if (out !== undefined) {
-                writeData('\n');
-            }
-            
-            writeData(out);
-        }, function(err) {
-            if (err) {
-                return output.emit('error', err);
-            }
-            
-            output.end('\n');
-        });
-    } else {
-        ns.wait.json(transform(input), function(err, data) {
-            if (err) {
-                return output.emit('error', err);
-            }
-            
-            writeData(run(data));
-            output.end('\n');
-        });
+        var commandErr;
+        
+        if (opts.multiline) {
+            ns.forEach.json(transform(byline(input)), function(data) {
+                if (commandErr) {
+                    return;
+                }
+                
+                try {
+                    onData(data);
+                } catch (e) {
+                    commandErr = e;
+                }
+            }, function(err) {
+                if (err) {
+                    return onEnd(err);
+                }
+                
+                if (commandErr) {
+                    return onEnd(commandErr);
+                }
+                
+                onEnd();
+            });
+        } else {
+            ns.wait.json(transform(input), function(err, data) {
+                if (err) {
+                    return onEnd(err);
+                }
+                
+                try {
+                    onData(data);
+                } catch (e) {
+                    return onEnd(e);
+                }
+                
+                onEnd();
+            });
+        }
     }
+    
+    // the first padding will not add a new line
+    var first = true;
+    
+    itterate(function onData(data) {
+        var out = run(data);
+            
+        if (out !== undefined && first) {
+            // skip padding with a new line
+            first = false;
+        } else if (out !== undefined) {
+            writeData('\n');
+        }
+
+        writeData(out);
+    }, function onEnd(err) {
+        if (err) {
+            return output.emit('error', err);
+        }
+
+        output.end('\n');
+    });
 };

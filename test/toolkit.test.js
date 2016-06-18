@@ -140,7 +140,7 @@ describe('[toolkit]', function() {
                 multiline: true,
                 attr: 'example'
             }
-        }, DATA, function(err, data) {
+        }, DATA, function(err) {
             expect(err).to.be.instanceOf(Error);
             expect(err.toString()).to.match(/SyntaxError/);
             
@@ -154,9 +154,40 @@ describe('[toolkit]', function() {
         execute({
             command: 'fudge',
             argv: {}
-        }, DATA, function(err, data) {
+        }, DATA, function(err) {
             expect(err).to.be.instanceOf(Error);
             expect(err.message).to.equal('"fudge" is not a known command');
+            
+            done();
+        });
+    });
+    
+    it('errors if a command has a runtime error in single line mode', function(done) {
+        var DATA = '{}';
+        
+        execute({
+            command: 'exec',
+            argv: {
+                code: 'not javascript code'
+            }
+        }, DATA, function(err) {
+            expect(err).to.be.instanceOf(Error);
+            
+            done();
+        });
+    });
+    
+    it('errors if a command has a runtime error in multiline mode', function(done) {
+        var DATA = '{}\n{}\n{}';
+        
+        execute({
+            command: 'exec',
+            argv: {
+                code: 'not javascript code',
+                multiline: true
+            }
+        }, DATA, function(err) {
+            expect(err).to.be.instanceOf(Error);
             
             done();
         });
