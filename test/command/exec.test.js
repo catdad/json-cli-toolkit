@@ -53,5 +53,26 @@ describe('[exec]', function() {
         });
     });
     
-    it('errors when the code is not JavaScript');
+    it('can use `opts` for shared storage across executions', function() {
+        var data = {};
+        var opts = {
+             code: 'opts.n = opts.n || 0; obj.n = opts.n; opts.n +=1;'
+        };
+        
+        expect(exec(data, opts)).to.have.property('n').and.to.equal(0);
+        expect(opts).to.have.property('n').and.to.equal(1);
+        
+        expect(exec(data, opts)).to.have.property('n').and.to.equal(1);
+        expect(opts).to.have.property('n').and.to.equal(2);
+    });
+    
+    it('throws when the code is not JavaScript', function() {
+        var opts = {
+            code: 'definitely not code'
+        };
+        
+        expect(function() {
+            exec({}, opts);
+        }).to.throw(SyntaxError);
+    });
 });
