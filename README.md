@@ -221,7 +221,7 @@ Wrap the input json in a new object at a defined path.
 
 **Examples:**
 
-``bash
+```bash
 json wrap --attr propname
 json wrap --attr nested.prop
 ```
