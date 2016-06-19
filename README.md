@@ -139,9 +139,10 @@ json echo --pretty
 
 Use arbitrary JavaScript to transform or filter the input json:
 
-`--code`: The code to execute. This code will have a global `obj` object, which is the JSON being treated. This code will be called multiple times if running in.
-
-`--multiline`. You can modify this object as you like, and the result will be used for the output. Setting `obj` to `undefined` will filter the json object out of the output. For convenience, this code will also have access to `lodash` as a global `_` variable, like you might expect.
+`--code`: The code to execute. This code will be called multiple times if running with the `multiline` flag. It has acess to the following global objects:
+  - `obj`: An object, which is the JSON being treated. You can modify this object as you like, and the result will be used for the output. Setting `obj` to `undefined` will filter the json object out of the output.
+  - `opts`: The options object for the `exec` command. This object is shared across all executions of the code, and can be used to store and share data between executions.
+  - `_`: Lodash, for convenience.
 
 **Examples:**
 
