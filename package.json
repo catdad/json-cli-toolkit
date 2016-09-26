@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/catdad/json-cli-toolkit#readme",
   "dependencies": {
-    "byline": "^4.2.1",
+    "byline": "^5.0.0",
     "lodash": "^4.13.1",
     "node-stream": "0.0.6",
     "through2": "^2.0.1",
-    "yargs": "^4.7.1"
+    "yargs": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
