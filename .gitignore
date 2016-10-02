@@ -17,13 +17,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# =========================
-# Operating System Files
-# =========================
-
 # OSX
-# =========================
-
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -49,5 +43,4 @@ Temporary Items
 # Node stuff
 node_modules/
 coverage/
-
 *.cmd
