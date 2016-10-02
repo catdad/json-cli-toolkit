@@ -6,23 +6,23 @@ var _ = require('lodash');
 var filter = require('../../lib/command/filter.js');
 
 describe('[filter]', function() {
-    
+
     function test(OBJ, opts, succeed) {
         var val = filter(OBJ, opts);
-        
+
         if (succeed) {
             expect(val).to.equal(OBJ);
         } else {
             expect(val).to.equal(undefined);
         }
     }
-    
+
     function notTest(OBJ, opts, succeed) {
         var clone = _.cloneDeep(opts);
         clone.not = true;
-        
+
         var val = filter(OBJ, clone);
-        
+
         // `succeed` tells us that the original options,
         // before adding the `not` were expected to
         // succeed
@@ -32,42 +32,42 @@ describe('[filter]', function() {
             expect(val).to.equal(OBJ);
         }
     }
-    
+
     function runTests(defaultTests, notTests) {
         defaultTests.forEach(function(func) {
             func();
         });
-        
+
         describe('--not', function() {
             notTests.forEach(function(func) {
                 func();
             });
         });
     }
-    
+
     function createTests(testList) {
         var defaultTests = [];
         var notTests = [];
-        
+
         testList.forEach(function(desc) {
             defaultTests.push(function() {
                 it('returns ' + desc.msg, function() {
                     test(desc.obj, desc.opts, desc.succeed);
                 });
             });
-            
+
             notTests.push(function() {
                 it('does not return ' + desc.msg, function() {
                     notTest(desc.obj, desc.opts, desc.succeed);
                 });
             });
         });
-        
+
         runTests(defaultTests, notTests);
     }
-    
+
     describe('--attr', function() {
-        
+
         createTests([{
             obj: { example: 'pants' },
             opts: { attr: 'example' },
@@ -89,11 +89,11 @@ describe('[filter]', function() {
             succeed: false,
             msg: 'undefined if the property does not exist'
         }]);
-        
+
     });
-    
+
     describe('--attr --equals', function() {
-        
+
         createTests([{
             obj: { example: 'pants' },
             opts: { attr: 'example', equals: 'pants' },
@@ -122,9 +122,9 @@ describe('[filter]', function() {
         }]);
 
     });
-    
+
     describe('--attr --matches', function() {
-        
+
         createTests([{
             obj: { example: 'pants' },
             opts: { attr: 'example', matches: '^p' },
@@ -148,6 +148,6 @@ describe('[filter]', function() {
             succeed: false,
             msg: 'undefined if the property is present but doesn\'t match'
         }]);
-        
+
     });
 });

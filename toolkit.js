@@ -13,7 +13,7 @@ function printer(prettyPrint) {
             return JSON.stringify(obj, false, 4);
         } else {
             return JSON.stringify(obj);
-        }    
+        }
     };
 }
 
@@ -34,15 +34,15 @@ module.exports = function(options) {
     var input = options.input;
     var output = options.output;
     var opts = options.argv;
-    
+
     if (!validateCommand(command)) {
         // make sure this is async, because sometimes people call
         // a command before registering error handlers on it
         return emitAsync(output, 'error', new Error('"' + command + '" is not a known command'));
     }
-    
+
     var printJson = printer(opts.pretty);
-    
+
     function writeData(data, pad) {
         if (_.isString(data)) {
             output.write(data);
@@ -50,25 +50,25 @@ module.exports = function(options) {
             output.write(printJson(data));
         }
     }
-    
+
     function run(data) {
         return runCommand(command, data, opts);
     }
-    
+
     function transform(stream) {
         return util.transform(stream, opts);
     }
-    
+
     function itterate(onData, onEnd) {
-        
+
         var commandErr;
-        
+
         if (opts.multiline) {
             ns.forEach.json(transform(byline(input)), function(data) {
                 if (commandErr) {
                     return;
                 }
-                
+
                 try {
                     onData(data);
                 } catch (e) {
@@ -78,11 +78,11 @@ module.exports = function(options) {
                 if (err) {
                     return onEnd(err);
                 }
-                
+
                 if (commandErr) {
                     return onEnd(commandErr);
                 }
-                
+
                 onEnd();
             });
         } else {
@@ -90,24 +90,24 @@ module.exports = function(options) {
                 if (err) {
                     return onEnd(err);
                 }
-                
+
                 try {
                     onData(data);
                 } catch (e) {
                     return onEnd(e);
                 }
-                
+
                 onEnd();
             });
         }
     }
-    
+
     // the first padding will not add a new line
     var first = true;
-    
+
     itterate(function onData(data) {
         var out = run(data);
-            
+
         if (out !== undefined && first) {
             // skip padding with a new line
             first = false;

@@ -11,7 +11,7 @@ describe('[pluck]', function() {
         }, {
             attr: 'thing'
         });
-        
+
         expect(out).to.equal('stuff');
     });
     it('can return nested properties', function() {
@@ -20,7 +20,7 @@ describe('[pluck]', function() {
         }, {
             attr: 'nested.key'
         });
-        
+
         expect(out).to.equal('value');
     });
 });
