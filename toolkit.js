@@ -64,7 +64,7 @@ module.exports = function(options) {
 
     pump(
         input,
-        (opts.multiline) ? ns.split() : through.obj(),
+        (opts.multiline) ? ns.split() : ns.wait(),
         util.transform(opts),
         through.obj(function onData(data, enc, cb) {
             var out;

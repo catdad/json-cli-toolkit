@@ -17,6 +17,8 @@ describe('[toolkit]', function() {
         options.input = options.input || input;
         options.output = options.output || output;
 
+        options.argv = options.argv || {};
+
         toolkit(options);
 
         ns.wait(options.output, function(err, dataBuff) {
@@ -27,8 +29,16 @@ describe('[toolkit]', function() {
             callback(undefined, dataBuff.toString());
         });
 
-        input.write(data);
-        input.end();
+        if (data !== undefined) {
+            input.write(data);
+            input.end();
+        } else {
+            return input;
+        }
+    }
+
+    function toJson(data) {
+        return JSON.stringify(data);
     }
 
     it('takes and input and output streams', function(done) {
@@ -36,8 +46,7 @@ describe('[toolkit]', function() {
         var DATA = JSON.stringify({ example: 'json' });
 
         execute({
-            command: 'echo',
-            argv: {}
+            command: 'echo'
         }, DATA, function(err, data) {
             if (err) {
                 return done(err);
@@ -111,6 +120,77 @@ describe('[toolkit]', function() {
             expect(data).to.equal(JSON.stringify(DATA, false, 4) + '\n');
             done();
         });
+    });
+
+    it('handles slowly writing json in single mode', function(done) {
+        var json = JSON.stringify({ one: 'two', three: 'four', five: 'six'});
+
+        var input = execute({
+            command: 'echo'
+        }, undefined, function(err, data) {
+            if (err) {
+                return done(err);
+            }
+
+            expect(data.toString().trim()).to.equal(json);
+
+            done();
+        });
+
+        var counter = 0;
+        var throttle = through(function(data, enc, cb) {
+            setTimeout(function() {
+                cb(null, data);
+            }, counter++);
+        });
+
+        throttle.pipe(input);
+
+        var copy = json;
+
+        while(copy.length) {
+            throttle.write(copy.slice(0,5));
+            copy = copy.slice(5);
+        }
+
+        throttle.end();
+    });
+
+    it('handles slowly writing json in multiline', function(done) {
+        var json = [{ one: 'two'}, { three: 'four'}, { five: 'six'}].map(toJson).join('\n');
+
+        var input = execute({
+            command: 'echo',
+            argv: {
+                multiline: true
+            }
+        }, undefined, function(err, data) {
+            if (err) {
+                return done(err);
+            }
+
+            expect(data.toString().trim()).to.equal(json);
+
+            done();
+        });
+
+        var counter = 0;
+        var throttle = through(function(data, enc, cb) {
+            setTimeout(function() {
+                cb(null, data);
+            }, counter++);
+        });
+
+        throttle.pipe(input);
+
+        var copy = json;
+
+        while(copy.length) {
+            throttle.write(copy.slice(0,5));
+            copy = copy.slice(5);
+        }
+
+        throttle.end();
     });
 
     it('errors if the input is not json', function(done) {
