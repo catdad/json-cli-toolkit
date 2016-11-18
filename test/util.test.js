@@ -16,20 +16,21 @@ describe('[util]', function() {
     describe('#transform', function() {
         it('applies utils to a stream', function(done) {
             var DATA = 'pants {}';
-            var input = through();
+            var input = through.obj();
 
-            var t = util.transform(input, {
+            var out = input.pipe(util.transform({
                 pretrim: true
-            });
+            }));
 
-            ns.wait(t, function(err, buff) {
+            ns.wait.obj(out, function(err, data) {
                 if (err) {
                     return done(err);
                 }
 
-                var str = buff.toString();
-
-                expect(str).to.equal('{}');
+                expect(data).to.be.an('array')
+                    .and.to.have.lengthOf(1)
+                    .and.to.have.property('0')
+                    .and.to.deep.equal({});
 
                 done();
             });
@@ -38,23 +39,27 @@ describe('[util]', function() {
         });
 
         it('ignored bad json with a flag', function(done) {
-            var DATA = JSON.stringify({ example: 'pants' });
-            var input = through();
-            var t = util.transform(input, {
-                ignore: true
-            });
+            var DATA = { example: 'pants' };
+            var input = through.obj();
 
-            ns.wait(t, function(err, buff) {
+            var out = input.pipe(util.transform({
+                ignore: true
+            }));
+
+            ns.wait.obj(out, function(err, data) {
                 if (err) {
                     return done(err);
                 }
 
-                expect(buff.toString()).to.equal(DATA);
+                expect(data).to.be.an('array')
+                    .and.to.have.lengthOf(1)
+                    .and.to.have.property('0')
+                    .and.to.deep.equal(DATA);
 
                 done();
             });
 
-            input.write(DATA);
+            input.write(JSON.stringify(DATA));
             input.write('not json data');
             input.end();
         });

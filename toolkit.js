@@ -1,8 +1,9 @@
-/* jshint node: true */
+/* jshint node: true, unused: true */
 
 var _ = require('lodash');
 var ns = require('node-stream');
-var byline = require('byline');
+var through = require('through2');
+var pump = require('pump');
 
 var commands = require('./lib/command.js');
 var util = require('./lib/util.js');
@@ -43,11 +44,15 @@ module.exports = function(options) {
 
     var printJson = printer(opts.pretty);
 
-    function writeData(data, pad) {
+    function writeData(data) {
         if (_.isString(data)) {
             output.write(data);
         } else if (data !== undefined) {
             output.write(printJson(data));
+        }
+
+        if (arguments.length > 1) {
+            writeData.apply(null, [].slice.call(arguments, 1));
         }
     }
 
@@ -55,72 +60,39 @@ module.exports = function(options) {
         return runCommand(command, data, opts);
     }
 
-    function transform(stream) {
-        return util.transform(stream, opts);
-    }
+    var wroteOutput = false;
 
-    function itterate(onData, onEnd) {
+    pump(
+        input,
+        (opts.multiline) ? ns.split() : ns.wait(),
+        util.transform(opts),
+        through.obj(function onData(data, enc, cb) {
+            var out;
 
-        var commandErr;
+            try {
+                out = run(data);
+            } catch (e) {
+                return cb(e);
+            }
 
-        if (opts.multiline) {
-            ns.forEach.json(transform(byline(input)), function(data) {
-                if (commandErr) {
-                    return;
-                }
+            if (out !== undefined) {
+                writeData(out, '\n');
+                wroteOutput = true;
+            }
 
-                try {
-                    onData(data);
-                } catch (e) {
-                    commandErr = e;
-                }
-            }, function(err) {
-                if (err) {
-                    return onEnd(err);
-                }
+            cb();
+        }, function onFlush(cb) {
+            if (!wroteOutput) {
+                this.push('\n');
+            }
 
-                if (commandErr) {
-                    return onEnd(commandErr);
-                }
-
-                onEnd();
-            });
-        } else {
-            ns.wait.json(transform(input), function(err, data) {
-                if (err) {
-                    return onEnd(err);
-                }
-
-                try {
-                    onData(data);
-                } catch (e) {
-                    return onEnd(e);
-                }
-
-                onEnd();
-            });
+            cb(null);
+        }),
+        output,
+        function (err) {
+            if (err) {
+                output.emit('error', err);
+            }
         }
-    }
-
-    // the first padding will not add a new line
-    var first = true;
-
-    itterate(function onData(data) {
-        var out = run(data);
-
-        if (out !== undefined && first) {
-            // skip padding with a new line
-            first = false;
-        } else if (out !== undefined) {
-            writeData('\n');
-        }
-
-        writeData(out);
-    }, function onEnd(err) {
-        if (err) {
-            return output.emit('error', err);
-        }
-
-        output.end('\n');
-    });
+    );
 };
