@@ -72,10 +72,9 @@ describe('[toolkit]', function() {
     });
 
     it('multiline mode does not print anything when the command returns no data', function(done) {
-        var LINE = JSON.stringify({ example: 'json' });
         var DATA = util.format(
             '%s\n%s\n%s',
-            LINE,
+            JSON.stringify({ example: 'json' }),
             JSON.stringify({ example: 'pants' }),
             JSON.stringify({ yay: 'pineapples' })
         );

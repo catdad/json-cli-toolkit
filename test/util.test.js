@@ -6,7 +6,7 @@ var ns = require('node-stream');
 
 var util = require('../lib/util.js');
 
-describe('[util]', function() {
+describe.skip('[util]', function() {
     it('is an enum of all utils', function() {
         expect(util).to.have.all.keys([
             'pretrim'
