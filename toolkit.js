@@ -88,11 +88,10 @@ module.exports = function(options) {
 
             cb(null);
         }),
-        output,
         function (err) {
             if (err) {
                 output.emit('error', err);
             }
         }
-    );
+    ).pipe(output);
 };
