@@ -66,8 +66,6 @@ module.exports = function(options) {
         util.transform(opts),
         commandStream(command, opts),
         through.obj(function onData(data, enc, cb) {
-            console.log('read:', data);
-
             if (data !== undefined) {
                 wroteOutput = true;
                 this.push(serialize(data, '\n'));
