@@ -22,8 +22,8 @@ function validateCommand(command) {
     return !!commands[command];
 }
 
-function runCommand(command, data, opts) {
-    return commands[command](data, opts);
+function commandStream(command, opts) {
+    return commands[command](opts);
 }
 
 function emitAsync(stream, event, data) {
@@ -44,20 +44,16 @@ module.exports = function(options) {
 
     var printJson = printer(opts.pretty);
 
-    function writeData(data) {
-        if (_.isString(data)) {
-            output.write(data);
-        } else if (data !== undefined) {
-            output.write(printJson(data));
-        }
-
+    function serialize(data) {
         if (arguments.length > 1) {
-            writeData.apply(null, [].slice.call(arguments, 1));
+            return serialize(data) + serialize.apply(null, [].slice.call(arguments, 1));
         }
-    }
 
-    function run(data) {
-        return runCommand(command, data, opts);
+        if (_.isString(data)) {
+            return data;
+        }
+
+        return printJson(data);
     }
 
     var wroteOutput = false;
@@ -66,18 +62,11 @@ module.exports = function(options) {
         input,
         (opts.multiline) ? ns.split() : ns.wait(),
         util.transform(opts),
+        commandStream(command, opts),
         through.obj(function onData(data, enc, cb) {
-            var out;
-
-            try {
-                out = run(data);
-            } catch (e) {
-                return cb(e);
-            }
-
-            if (out !== undefined) {
-                writeData(out, '\n');
+            if (data !== undefined) {
                 wroteOutput = true;
+                this.push(serialize(data, '\n'));
             }
 
             cb();
