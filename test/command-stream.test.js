@@ -164,11 +164,11 @@ describe('[command-stream]', function() {
         input.end();
     });
 
-    it('returns a function that has an _isStream boolean set to true', function() {
+    it('returns a function that has an _isCommandStream boolean set to true', function() {
         var val = commandStream(_.noop);
 
         expect(val).to.be.a('function');
-        expect(val).to.have.property('_isStream').and.to.equal(true);
+        expect(val).to.have.property('_isCommandStream').and.to.equal(true);
     });
 
     it('does not wrap a function that already produces a command stream', function() {
