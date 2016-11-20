@@ -71,7 +71,11 @@ function executeCli(options, data, callback) {
         stdin: input
     }, function(err, stdout, stderr) {
         if (err) {
-            return callback(err);
+            var l = stderr.trim().split('\n').shift();
+            var e = new Error(l);
+            e.code = err.code;
+
+            return callback(e);
         }
 
         callback(undefined, stdout);
@@ -280,7 +284,7 @@ function runTests(execute) {
             argv: {}
         }, DATA, function(err) {
             expect(err).to.be.instanceOf(Error);
-            expect(err.message).to.equal('"fudge" is not a known command');
+            expect(err.message).to.contain('"fudge" is not a known command');
 
             done();
         });
