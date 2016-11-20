@@ -129,6 +129,60 @@ function runTests(execute) {
         });
     });
 
+    it('can trim non-json data from the front of json lines', function(done) {
+        var JSON_DATA = [
+            JSON.stringify({ example: 'json' }),
+            JSON.stringify({ more: 'json' }),
+            JSON.stringify({ yay: 'pineapples' })
+        ];
+
+        var DATA = JSON_DATA.map(function(str) {
+            return Math.random().toString(36) + str;
+        }).join('\n');
+
+        execute({
+            command: 'echo',
+            argv: {
+                multiline: true,
+                pretrim: true
+            }
+        }, DATA, function(err, data) {
+            if (err) {
+                return done(err);
+            }
+
+            expect(data).to.equal(JSON_DATA.join('\n') + '\n');
+            done();
+        });
+    });
+
+    it('can ignore non-json data', function(done) {
+        var JSON_DATA = [
+            JSON.stringify({ example: 'json' }),
+            JSON.stringify({ more: 'json' }),
+            JSON.stringify({ yay: 'pineapples' })
+        ];
+
+        var DATA = JSON_DATA.map(function(str) {
+            return Math.random().toString(36) + '\n' + str;
+        }).join('\n');
+
+        execute({
+            command: 'echo',
+            argv: {
+                multiline: true,
+                ignore: true
+            }
+        }, DATA, function(err, data) {
+            if (err) {
+                return done(err);
+            }
+
+            expect(data).to.equal(JSON_DATA.join('\n') + '\n');
+            done();
+        });
+    });
+
     it('multiline mode does not print anything when the command returns no data', function(done) {
         var DATA = util.format(
             '%s\n%s\n%s',
