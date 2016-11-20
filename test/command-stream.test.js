@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 var commandStream = require('../lib/command-stream.js');
 
-describe.only('[command-stream]', function() {
+describe('[command-stream]', function() {
     it('calls the data function once for each written item', function(done) {
         var input = through();
         var OPTS = { some: 'pineapples' };
