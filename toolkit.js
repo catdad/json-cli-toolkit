@@ -51,11 +51,9 @@ module.exports = function(options) {
 
         if (_.isString(data)) {
             return data;
-        } else if (data !== undefined) {
-            return printJson(data);
         }
 
-        return '';
+        return printJson(data);
     }
 
     var wroteOutput = false;
