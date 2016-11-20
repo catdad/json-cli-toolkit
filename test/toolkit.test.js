@@ -1,46 +1,91 @@
 /* jshint node: true, mocha: true */
 
+var path = require('path');
 var util = require('util');
-var _ = require('lodash');
 
 var expect = require('chai').expect;
+var _ = require('lodash');
 var through = require('through2');
 var ns = require('node-stream');
+var shellton = require('shellton');
+var root = require('rootrequire');
 
 var toolkit = require('../toolkit.js');
 
-describe('[toolkit]', function() {
-    function execute(options, data, callback) {
-        var input = through();
-        var output = through();
+function toJson(data) {
+    return JSON.stringify(data);
+}
 
-        options.input = options.input || input;
-        options.output = options.output || output;
+function executeApi(options, data, callback) {
+    var input = through();
+    var output = through();
 
-        options.argv = options.argv || {};
+    options.input = options.input || input;
+    options.output = options.output || output;
 
-        toolkit(options);
+    options.argv = options.argv || {};
 
-        ns.wait(options.output, function(err, dataBuff) {
-            if (err) {
-                return callback(err);
-            }
+    toolkit(options);
 
-            callback(undefined, dataBuff.toString());
-        });
-
-        if (data !== undefined) {
-            input.write(data);
-            input.end();
-        } else {
-            return input;
+    ns.wait(options.output, function(err, dataBuff) {
+        if (err) {
+            return callback(err);
         }
-    }
 
-    function toJson(data) {
-        return JSON.stringify(data);
-    }
+        callback(undefined, dataBuff.toString());
+    });
 
+    if (data !== undefined) {
+        input.write(data);
+        input.end();
+    } else {
+        return input;
+    }
+}
+
+function executeCli(options, data, callback) {
+    var env = {
+        PATH: path.dirname(process.execPath) + path.delimiter + process.env.PATH
+    };
+    var cwd = root;
+    var cli = path.resolve(root, 'bin/cli.js');
+    var argv = _.reduce(options.argv || {}, function(memo, value, key) {
+        if (value === true) {
+            return memo + util.format(' --%s', key);
+        } else if (value === false) {
+            return memo + util.format(' --no-%s', key);
+        } else if (_.isNumber(value)) {
+            return memo + util.format(' --%s %s', key, value);
+        } else {
+            return memo + util.format(' --%s "%s"', key, value);
+        }
+    }, options.command);
+    var task = util.format('%s "%s" %s', 'node', cli, argv);
+
+    var input = options.input || through();
+
+    shellton({
+        task: task,
+        cwd: cwd,
+        env: env,
+        stdin: input
+    }, function(err, stdout, stderr) {
+        if (err) {
+            return callback(err);
+        }
+
+        callback(undefined, stdout);
+    });
+
+    if (data !== undefined) {
+        input.write(data);
+        input.end();
+    } else {
+        return input;
+    }
+}
+
+function runTests(execute) {
     it('takes and input and output streams', function(done) {
         // single line of json
         var DATA = JSON.stringify({ example: 'json' });
@@ -403,4 +448,12 @@ describe('[toolkit]', function() {
             });
         });
     });
+}
+
+describe('[toolkit]', function() {
+    runTests(executeApi);
+});
+
+describe('[cli]', function() {
+    runTests(executeCli);
 });
