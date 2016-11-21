@@ -24,13 +24,21 @@ function run(data, opts, done) {
     write(input, data);
 }
 
+function dataArr(arr, prop) {
+    return arr.map(function(val) {
+        return _.set({}, prop, val);
+    });
+}
+
 describe('[set]', function() {
     it('exposes a commandStream directly');
 
     it('writes data at the end', function(done) {
-        var DATA = [1, 2, 3];
+        var DATA = dataArr([1, 2, 3], 'val');
 
-        run(DATA, {}, function(err, data) {
+        run(DATA, {
+            attr: 'val'
+        }, function(err, data) {
             if (err) {
                 return done(err);
             }
@@ -42,9 +50,11 @@ describe('[set]', function() {
     });
 
     it('sorts numbers written as input', function(done) {
-        var DATA = [5, 4, 3, 2, 1];
+        var DATA = dataArr([5, 4, 3, 2, 1], 'val');
 
-        run(DATA, {}, function(err, data) {
+        run(DATA, {
+            attr: 'val'
+        }, function(err, data) {
             if (err) {
                 return done(err);
             }
@@ -56,9 +66,11 @@ describe('[set]', function() {
     });
 
     it('sorts strings written as input', function(done) {
-        var DATA = ['d', 'c', 'b', 'aa', 'a'];
+        var DATA = dataArr(['d', 'c', 'b', 'aa', 'a'], 'val');
 
-        run(DATA, {}, function(err, data) {
+        run(DATA, {
+            attr: 'val'
+        }, function(err, data) {
             if (err) {
                 return done(err);
             }
