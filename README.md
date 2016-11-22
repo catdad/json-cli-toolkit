@@ -43,7 +43,7 @@ This will expose the command `json` in your path.
   * [`pretrim`](#pretrim)
   * [`pretty`](#pretty)
 * Commands
-  * [`delete`](#delete)
+  * [`delete`](#json-delete)
   * [`echo`](#echo)
   * [`exec`](#exec)
   * [`filter`](#filter)
@@ -53,7 +53,6 @@ This will expose the command `json` in your path.
 
 ### Common options
 
-<a name="ignore"></a>
 #### ignore
 
 Ignore input that is not json. By default, `json` will error for parsing errors.
@@ -64,7 +63,6 @@ Ignore input that is not json. By default, `json` will error for parsing errors.
 
 `json -i`
 
-<a name="multiline"></a>
 #### multiline
 
 Read multiline input as one json object per line.
@@ -75,7 +73,6 @@ Read multiline input as one json object per line.
 
 `json -m`
 
-<a name="pretrim"></a>
 #### pretrim
 
 Remove non-json content from the beginning of the input.
@@ -86,7 +83,6 @@ Remove non-json content from the beginning of the input.
 
 `json -r`
 
-<a name="pretty"></a>
 #### pretty
 
 Pretty-print the json output.
@@ -105,7 +101,6 @@ All commands have help in the CLI. You can access it as such:
 json <command> --help
 ```
 
-<a name="delete"></a>
 #### `json delete`
 
 Remove a particular property and its value from the json.
