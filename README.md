@@ -44,12 +44,12 @@ This will expose the command `json` in your path.
   * [`pretty`](#pretty)
 * Commands
   * [`delete`](#json-delete)
-  * [`echo`](#echo)
-  * [`exec`](#exec)
-  * [`filter`](#filter)
-  * [`pluck`](#pluck)
-  * [`set`](#set)
-  * [`wrap`](#wrap)
+  * [`echo`](#json-echo)
+  * [`exec`](#json-exec)
+  * [`filter`](#json-filter)
+  * [`pluck`](#json-pluck)
+  * [`set`](#json-set)
+  * [`wrap`](#json-wrap)
 
 ### Common options
 
@@ -117,7 +117,6 @@ json delete --attr nested.prop
 json delete --attr one --attr two
 ```
 
-<a name="echo"></a>
 #### `json echo`
 
 Print the input json to the output.
@@ -129,7 +128,6 @@ json echo
 json echo --pretty
 ```
 
-<a name="exec"></a>
 #### `json exec`
 
 Use arbitrary JavaScript to transform or filter the input json:
@@ -149,7 +147,6 @@ json exec --code "obj.newProp = obj.one + obj.two"
 json exec --multiline --code "if (obj.name !== 'thing') obj = undefined"
 ```
 
-<a name="filter"></a>
 #### `json filter`
 
 Filter only json input entries that match specific rules:
@@ -170,7 +167,6 @@ json filter --attr nested.prop --matches ^[0-9]{3,}
 json filter --attr propname --not --equals poptarts
 ```
 
-<a name="pluck"></a>
 #### `json pluck`
 
 Get a value from the json object and print it to output.
@@ -184,7 +180,6 @@ json pluck --attr propname
 json pluck --attr nested.prop
 ```
 
-<a name="set"></a>
 #### `json set`
 
 Set a particular value in the json object.
@@ -208,7 +203,6 @@ json set --multiline --attr count --value 1 --inc
 json set --multiline --attr fiveLess --value 0 --inc -5
 ```
 
-<a name="wrap"></a>
 #### `json wrap`
 
 Wrap the input json in a new object at a defined path.
