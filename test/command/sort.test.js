@@ -80,4 +80,16 @@ describe('[set]', function() {
             done();
         });
     });
+
+    it('does not fail if no data is written to the stream', function(done) {
+        run([], {}, function(err, data) {
+            if (err) {
+                return done(err);
+            }
+
+            expect(data).to.be.an('array').and.to.have.lengthOf(0);
+
+            done();
+        });
+    });
 });
