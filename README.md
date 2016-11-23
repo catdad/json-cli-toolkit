@@ -49,6 +49,7 @@ This will expose the command `json` in your path.
   * [`filter`](#json-filter)
   * [`pluck`](#json-pluck)
   * [`set`](#json-set)
+  * [`sort`](#json-sort)
   * [`wrap`](#json-wrap)
 
 ### Common options
@@ -201,6 +202,20 @@ json set --multiline --attr count --value 1 --inc
 
 # Decrement the value being set by 5 each time
 json set --multiline --attr fiveLess --value 0 --inc -5
+```
+
+#### `json sort`
+
+Sorts multiple json records. This is most useful when used along with the `--multiline` flag, as sorting a single json record just results in that record.
+
+_Note: since this command needs to read the entire input content, it may not work with very large datasets like the other commands. Use responsibly._
+
+`--attr`: The property in the json objects to use to sort. Nesxted properties can be defined using dot notation.
+
+**Examples:**
+
+```bash
+json sort --multiline --attr some.property
 ```
 
 #### `json wrap`
