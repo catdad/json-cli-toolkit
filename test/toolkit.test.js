@@ -491,6 +491,23 @@ function runTests(execute) {
                     out: JSON.stringify({ 'undefined': {} }),
                     opts: {}
                 }
+            },
+            sort: {
+                positive: {
+                    data: [{ prop: 2 }, { prop: 3 }, { prop: 1 }].map(toJson).join('\n'),
+                    out: [{ prop: 1 }, { prop: 2 }, { prop: 3 }].map(toJson).join('\n'),
+                    opts: {
+                        attr: 'prop',
+                        multiline: true
+                    }
+                },
+                negative: {
+                    data: '',
+                    out: '',
+                    opts: {
+                        ignore: true
+                    }
+                }
             }
         };
 
