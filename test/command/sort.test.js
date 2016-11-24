@@ -81,6 +81,46 @@ describe('[set]', function() {
         });
     });
 
+    ['ascending', 1].forEach(function(order) {
+        it('sorts in ascending order using the order prop: ' + order, function(done) {
+            var DATA = dataArr([2, 3, 1], 'val');
+            var ORDERED = dataArr([1, 2, 3], 'val');
+
+            run(DATA, {
+                attr: 'val',
+                order: order
+            }, function(err, data) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(data).to.deep.equal(ORDERED);
+
+                done();
+            });
+        });
+    });
+
+    ['descending', -1].forEach(function(order) {
+        it('sorts in descending order using the order prop: ' + order, function(done) {
+            var DATA = dataArr([2, 3, 1], 'val');
+            var ORDERED = dataArr([3, 2, 1], 'val');
+
+            run(DATA, {
+                attr: 'val',
+                order: order
+            }, function(err, data) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(data).to.deep.equal(ORDERED);
+
+                done();
+            });
+        });
+    });
+
     it('does not fail if no data is written to the stream', function(done) {
         run([], {}, function(err, data) {
             if (err) {
