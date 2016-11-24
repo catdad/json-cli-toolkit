@@ -164,6 +164,41 @@ describe('[command-stream]', function() {
         input.end();
     });
 
+    it('can push more data to the stream from the flush method', function(done) {
+        var input = through();
+        var OPTS = { some: 'pineapples' };
+        var DATA = ['1', '2', '3'];
+
+        var out = 0;
+
+        var stream = commandStream(function dataFn(data, opts) {
+            expect(opts).to.equal(OPTS);
+
+            return data;
+        }, function flushFn(opts, cb) {
+            expect(opts).to.equal(OPTS);
+            expect(cb).to.be.a('function');
+
+            this.push('4');
+            this.push('5');
+
+            cb();
+        })(OPTS).on('data', function() {
+            out += 1;
+        }).on('end', function() {
+            expect(out).to.equal(DATA.length + 2);
+
+            done();
+        });
+
+        input.pipe(stream);
+
+        DATA.forEach(function(val) {
+            input.write(val);
+        });
+        input.end();
+    });
+
     it('returns a function that has an _isCommandStream boolean set to true', function() {
         var val = commandStream(_.noop);
 
