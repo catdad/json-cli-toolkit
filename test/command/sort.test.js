@@ -81,6 +81,29 @@ describe('[set]', function() {
         });
     });
 
+    it('keeps items in the same order if they have the same sort value', function(done) {
+        var DATA = dataArr([3, 2, 2, 1], 'val').map(function(val, i, arr) {
+            val.idx = arr.length - 1 - i;
+            return val;
+        });
+
+        run(DATA, {
+            attr: 'val'
+        }, function(err, data) {
+            if (err) {
+                return done(err);
+            }
+
+            var idxs = data.map(function(val) {
+                return val.idx;
+            });
+
+            expect(idxs).to.deep.equal([0, 2, 1, 3]);
+
+            done();
+        });
+    });
+
     ['ascending', 1].forEach(function(order) {
         it('sorts in ascending order using the order prop: ' + order, function(done) {
             var DATA = dataArr([2, 3, 1], 'val');
