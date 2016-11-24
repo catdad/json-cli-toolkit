@@ -212,10 +212,14 @@ _Note: since this command needs to read the entire input content, it may not wor
 
 `--attr`: The property in the json objects to use to sort. Nesxted properties can be defined using dot notation.
 
+`--order`: The sort order to use. The acceptable values are `ascending` (or `1`) and `descending` (or `-1`). The default order is ascending, when this flag is not defined.
+
 **Examples:**
 
 ```bash
-json sort --multiline --attr some.property
+json sort --multiline --attr propname
+json sort --multiline --attr some.property --order ascending
+json sort -m --attr propname --order -1
 ```
 
 #### `json wrap`
