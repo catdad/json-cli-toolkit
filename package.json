@@ -25,11 +25,11 @@
     "node-stream": "^1.1.0",
     "pump": "^1.0.1",
     "through2": "^2.0.1",
-    "yargs": "^5.0.0"
+    "yargs": "^6.4.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "codeclimate-test-reporter": "^0.3.2",
+    "codeclimate-test-reporter": "^0.4.0",
     "istanbul": "^0.4.3",
     "mocha": "^3.0.2",
     "rootrequire": "^1.0.0",
