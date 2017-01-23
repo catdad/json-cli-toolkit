@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var ns = require('node-stream');
 var through = require('through2');
-var pump = require('pump');
 
 var commands = require('./lib/command.js');
 var util = require('./lib/util.js');
@@ -58,7 +57,7 @@ module.exports = function(options) {
 
     var wroteOutput = false;
 
-    pump(
+    ns.pipeline(
         input,
         (opts.multiline) ? ns.split() : ns.wait(),
         util.transform(opts),
@@ -76,11 +75,8 @@ module.exports = function(options) {
             }
 
             cb(null);
-        }),
-        function (err) {
-            if (err) {
-                output.emit('error', err);
-            }
-        }
-    ).pipe(output);
+        })
+    ).on('error', function (err) {
+        output.emit('error', err);
+    }).pipe(output);
 };
