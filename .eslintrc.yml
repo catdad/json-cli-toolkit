@@ -2,7 +2,9 @@ extends: stezu/es5
 env:
   es6: false
 
-#rules:
+rules:
+
+  vars-on-top: off
 
   # Enforce valid JSDoc comments
   # http://eslint.org/docs/rules/valid-jsdoc
