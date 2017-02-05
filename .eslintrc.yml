@@ -1,0 +1,19 @@
+extends: stezu/es5
+env:
+  es6: false
+
+#rules:
+
+  # Enforce valid JSDoc comments
+  # http://eslint.org/docs/rules/valid-jsdoc
+#  valid-jsdoc:
+#    - error
+
+  # Require JSDoc comments
+  # http://eslint.org/docs/rules/require-jsdoc
+#  require-jsdoc:
+#    - error
+#    - require:
+#      FunctionDeclaration: true
+#      MethodDefinition: true
+#      ClassDeclaration: true
