@@ -36,6 +36,7 @@
     "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^3.0.1",
     "gulp-sequence": "^0.4.6",
+    "gulp-util": "^3.0.8",
     "istanbul": "^0.4.3",
     "mocha": "^3.0.2",
     "rootrequire": "^1.0.0",
