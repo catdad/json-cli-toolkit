@@ -7,8 +7,8 @@ var argv = require('../lib/argv.js');
 var command = argv._[0];
 
 if (!command) {
-    argv._yargs.showHelp();
-    process.exit(1);
+  argv._yargs.showHelp();
+  process.exit(1);
 }
 
 var toolkit = require('../toolkit.js');
@@ -28,15 +28,15 @@ process.stdin.pipe(input);
 output.pipe(process.stdout);
 
 toolkit({
-    input: input,
-    output: output,
-    command: command,
-    argv: argv
+  input: input,
+  output: output,
+  command: command,
+  argv: argv
 });
 
 function handleError(stream) {
-    stream.on('error', function(err) {
-        console.error('stream error: %s', err.stack);
-        process.exit(1);
-    });
+  stream.on('error', function (err) {
+    console.error('stream error: %s', err.stack);
+    process.exit(1);
+  });
 }
