@@ -30,19 +30,8 @@ function emitAsync(stream, event, data) {
   setImmediate(stream.emit.bind(stream), event, data);
 }
 
-module.exports = function (options) {
-  var command = options.command;
-  var input = options.input;
-  var output = options.output;
-  var opts = options.argv;
-
-  if (!validateCommand(command)) {
-        // make sure this is async, because sometimes people call
-        // a command before registering error handlers on it
-    return emitAsync(output, 'error', new Error('"' + command + '" is not a known command'));
-  }
-
-  var printJson = printer(opts.pretty);
+function serializerStream(pretty) {
+  var printJson = printer(pretty);
 
   function serialize(data) {
     if (arguments.length > 1) {
@@ -58,26 +47,45 @@ module.exports = function (options) {
 
   var wroteOutput = false;
 
+  return through.obj(function OnData(data, enc, cb) {
+    if (!_.isUndefined(data)) {
+      wroteOutput = true;
+      this.push(serialize(data, '\n'));
+    }
+
+    cb();
+  }, function OnFlush(cb) {
+    if (!wroteOutput) {
+      this.push('\n');
+    }
+
+    cb(null);
+  });
+}
+
+module.exports = function (options) {
+  var command = options.command;
+  var input = options.input;
+  var output = options.output;
+  var opts = options.argv;
+
+  if (!validateCommand(command)) {
+    // make sure this is async, because sometimes people call
+    // a command before registering error handlers on it
+    emitAsync(output, 'error', new Error('"' + command + '" is not a known command'));
+
+    return;
+  }
+
   ns.pipeline(
-        input,
-        opts.multiline ? ns.split() : ns.wait(),
-        util.transform(opts),
-        commandStream(command, opts),
-        through.obj(function onData(data, enc, cb) {
-          if (data !== undefined) {
-            wroteOutput = true;
-            this.push(serialize(data, '\n'));
-          }
-
-          cb();
-        }, function onFlush(cb) {
-          if (!wroteOutput) {
-            this.push('\n');
-          }
-
-          cb(null);
-        })
-    ).on('error', function (err) {
+    input,
+    opts.multiline ? ns.split() : ns.wait(),
+    util.transform(opts),
+    commandStream(command, opts),
+    serializerStream(opts.pretty)
+  )
+    .on('error', function (err) {
       output.emit('error', err);
-    }).pipe(output);
+    })
+    .pipe(output);
 };
