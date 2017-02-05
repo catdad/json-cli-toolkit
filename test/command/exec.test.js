@@ -1,5 +1,3 @@
-/* jshint node: true, mocha: true */
-
 var expect = require('chai').expect;
 
 var exec = require('../../lib/command/exec.js');

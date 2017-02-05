@@ -1,5 +1,3 @@
-/* jshint node: true, mocha: true */
-
 var expect = require('chai').expect;
 var _ = require('lodash');
 
@@ -71,6 +69,7 @@ describe('[delete]', function () {
     });
 
     expect(CLONE).to.deep.equal(OBJ);
+    expect(val).to.deep.equal(OBJ);
   });
 
 });

@@ -1,5 +1,3 @@
-/* jshint node: true, mocha: true */
-
 var expect = require('chai').expect;
 var _ = require('lodash');
 
@@ -28,9 +26,9 @@ describe('[set]', function () {
 
     expect(OBJ).to.equal(val);
     expect(val).to.have.property('three')
-            .and.to.be.an('object')
-            .and.to.have.property('four')
-            .and.to.equal(5);
+      .and.to.be.an('object')
+      .and.to.have.property('four')
+      .and.to.equal(5);
   });
 
   it('can set falsy values', function () {
@@ -51,7 +49,6 @@ describe('[set]', function () {
       value: 0,
       inc: 1
     };
-    var OBJ = {};
 
     expect(set({}, opts)).to.have.property('one').and.to.equal(0);
     expect(opts.value).to.equal(1);
@@ -66,7 +63,6 @@ describe('[set]', function () {
       value: 0,
       inc: -1
     };
-    var OBJ = {};
 
     expect(set({}, opts)).to.have.property('one').and.to.equal(0);
     expect(opts.value).to.equal(-1);
@@ -81,7 +77,6 @@ describe('[set]', function () {
       value: 0,
       inc: true
     };
-    var OBJ = {};
 
     expect(set({}, opts)).to.have.property('one').and.to.equal(0);
     expect(opts.value).to.equal(1);
@@ -94,7 +89,6 @@ describe('[set]', function () {
       value: 0,
       inc: false
     };
-    var OBJ = {};
 
     expect(set({}, opts)).to.have.property('one').and.to.equal(0);
     expect(opts.value).to.equal(0);
@@ -107,7 +101,6 @@ describe('[set]', function () {
       value: 0,
       inc: 'fudge'
     };
-    var OBJ = {};
 
     expect(set({}, opts)).to.have.property('one').and.to.equal(0);
     expect(opts.value).to.equal(1);
@@ -135,6 +128,7 @@ describe('[set]', function () {
     });
 
     expect(CLONE).to.deep.equal(OBJ);
+    expect(val).to.deep.equal(OBJ);
   });
 
   it('returns the object unmodified if value is not set', function () {
@@ -146,5 +140,6 @@ describe('[set]', function () {
     });
 
     expect(CLONE).to.deep.equal(OBJ);
+    expect(val).to.deep.equal(OBJ);
   });
 });

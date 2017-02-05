@@ -1,9 +1,9 @@
-/* jshint node: true, mocha: true */
-
 var expect = require('chai').expect;
 var _ = require('lodash');
 
 var filter = require('../../lib/command/filter.js');
+
+var undef = _.noop();
 
 describe('[filter]', function () {
 
@@ -13,7 +13,7 @@ describe('[filter]', function () {
     if (succeed) {
       expect(val).to.equal(OBJ);
     } else {
-      expect(val).to.equal(undefined);
+      expect(val).to.equal(undef);
     }
   }
 

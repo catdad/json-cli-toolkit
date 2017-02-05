@@ -1,5 +1,3 @@
-/* jshint node: true, mocha: true */
-
 var expect = require('chai').expect;
 var _ = require('lodash');
 var ns = require('node-stream');
@@ -46,7 +44,7 @@ describe('[set]', function () {
 
       expect(data).to.deep.equal(DATA);
 
-      done();
+      return done();
     });
   });
 
@@ -62,7 +60,7 @@ describe('[set]', function () {
 
       expect(data).to.deep.equal(DATA.reverse());
 
-      done();
+      return done();
     });
   });
 
@@ -78,7 +76,7 @@ describe('[set]', function () {
 
       expect(data).to.deep.equal(DATA.reverse());
 
-      done();
+      return done();
     });
   });
 
@@ -102,7 +100,7 @@ describe('[set]', function () {
 
       expect(idxs).to.deep.equal([0, 2, 1, 3]);
 
-      done();
+      return done();
     });
   });
 
@@ -121,7 +119,7 @@ describe('[set]', function () {
 
         expect(data).to.deep.equal(ORDERED);
 
-        done();
+        return done();
       });
     });
   });
@@ -141,7 +139,7 @@ describe('[set]', function () {
 
         expect(data).to.deep.equal(ORDERED);
 
-        done();
+        return done();
       });
     });
   });
@@ -154,7 +152,7 @@ describe('[set]', function () {
 
       expect(data).to.be.an('array').and.to.have.lengthOf(0);
 
-      done();
+      return done();
     });
   });
 });
