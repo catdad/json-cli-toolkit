@@ -7,11 +7,18 @@ var argv = require('../lib/argv.js');
 var command = argv._[0];
 
 if (!command) {
-  argv._yargs.showHelp();
+  argv.originalYargs.showHelp();
   process.exit(1);
 }
 
 var toolkit = require('../toolkit.js');
+
+function handleError(stream) {
+  stream.on('error', function (err) {
+    console.error('stream error: %s', err.stack);
+    process.exit(1);
+  });
+}
 
 // All streams used in the tool will be through stream,
 // it just makes everything easier.
@@ -34,9 +41,3 @@ toolkit({
   argv: argv
 });
 
-function handleError(stream) {
-  stream.on('error', function (err) {
-    console.error('stream error: %s', err.stack);
-    process.exit(1);
-  });
-}

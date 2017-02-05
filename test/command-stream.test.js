@@ -2,10 +2,11 @@
 
 var expect = require('chai').expect;
 var through = require('through2');
-var ns = require('node-stream');
 var _ = require('lodash');
 
 var commandStream = require('../lib/command-stream.js');
+
+var undef = _.noop();
 
 describe('[command-stream]', function () {
   it('calls the data function once for each written item', function (done) {
@@ -23,13 +24,15 @@ describe('[command-stream]', function () {
       count += 1;
 
       return data;
-    })(OPTS).on('data', function () {
-      out += 1;
-    }).on('end', function () {
-      expect(count).to.equal(out).and.to.equal(DATA.length);
+    })(OPTS)
+      .on('data', function () {
+        out += 1;
+      })
+      .on('end', function () {
+        expect(count).to.equal(out).and.to.equal(DATA.length);
 
-      done();
-    });
+        done();
+      });
 
     input.pipe(stream);
 
@@ -58,9 +61,11 @@ describe('[command-stream]', function () {
       count += 1;
 
       return output;
-    })(OPTS).on('data', function (data) {
-      expect(data.toString()).to.equal(OUT[count - 1]);
-    }).on('end', done);
+    })(OPTS)
+      .on('data', function (data) {
+        expect(data.toString()).to.equal(OUT[count - 1]);
+      })
+      .on('end', done);
 
     input.pipe(stream);
 
@@ -78,20 +83,22 @@ describe('[command-stream]', function () {
     var count = 0;
     var out = 0;
 
-    var stream = commandStream(function (data, opts) {
+    var stream = commandStream(function (data) {
       count += 1;
 
-      return Number(data.toString()) ? data : undefined;
-    })(OPTS).on('data', function (data) {
-      out += 1;
+      return Number(data.toString()) ? data : undef;
+    })(OPTS)
+      .on('data', function (data) {
+        out += 1;
 
-      expect(data.toString()).to.equal(DATA[0]);
-    }).on('end', function () {
-      expect(count).to.equal(DATA.length);
-      expect(out).to.equal(1);
+        expect(data.toString()).to.equal(DATA[0]);
+      })
+      .on('end', function () {
+        expect(count).to.equal(DATA.length);
+        expect(out).to.equal(1);
 
-      done();
-    });
+        done();
+      });
 
     input.pipe(stream);
 
@@ -112,16 +119,18 @@ describe('[command-stream]', function () {
 
     var count = 0;
 
-    var stream = commandStream(function (data, opts) {
+    var stream = commandStream(function (data) {
       expect(data).to.be.an('object').and.to.equal(DATA[count]);
       count += 1;
 
       return data;
-    })(OPTS).on('data', _.noop).on('end', function () {
-      expect(count).to.equal(DATA.length);
+    })(OPTS)
+      .on('data', _.noop)
+      .on('end', function () {
+        expect(count).to.equal(DATA.length);
 
-      done();
-    });
+        done();
+      });
 
     input.pipe(stream);
 
@@ -151,11 +160,13 @@ describe('[command-stream]', function () {
         cb();
       }, 2);
 
-    })(OPTS).on('data', _.noop).on('end', function () {
-      expect(flushFinished).to.equal(true);
+    })(OPTS)
+      .on('data', _.noop)
+      .on('end', function () {
+        expect(flushFinished).to.equal(true);
 
-      done();
-    });
+        done();
+      });
 
     input.pipe(stream);
 
@@ -172,11 +183,11 @@ describe('[command-stream]', function () {
 
     var out = 0;
 
-    var stream = commandStream(function dataFn(data, opts) {
+    var stream = commandStream(function OnData(data, opts) {
       expect(opts).to.equal(OPTS);
 
       return data;
-    }, function flushFn(opts, cb) {
+    }, function OnFlush(opts, cb) {
       expect(opts).to.equal(OPTS);
       expect(cb).to.be.a('function');
 
@@ -184,13 +195,15 @@ describe('[command-stream]', function () {
       this.push('5');
 
       cb();
-    })(OPTS).on('data', function () {
-      out += 1;
-    }).on('end', function () {
-      expect(out).to.equal(DATA.length + 2);
+    })(OPTS)
+      .on('data', function () {
+        out += 1;
+      })
+      .on('end', function () {
+        expect(out).to.equal(DATA.length + 2);
 
-      done();
-    });
+        done();
+      });
 
     input.pipe(stream);
 
