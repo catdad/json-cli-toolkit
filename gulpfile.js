@@ -2,7 +2,8 @@ var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 
 var source = {
-  js: ['*.js', 'bin/**/*.js', 'lib/**/*.js', 'test/**/*.js']
+  js: ['*.js', 'bin/**/*.js', 'lib/**/*.js', 'test/**/*.js'],
+  lib: ['*.js', 'bin/**/*.js', 'lib/**/*.js']
 };
 
 gulp.task('lint', function () {

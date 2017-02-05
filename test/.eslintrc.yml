@@ -7,3 +7,4 @@ rules:
   max-nested-callbacks:
     - "error"
     - 4
+  max-lines: off

@@ -32,19 +32,20 @@ function executeApi(options, data, callback) {
       return callback(err);
     }
 
-    callback(undefined, dataBuff.toString());
+    return callback(null, dataBuff.toString());
   });
 
-  if (data !== undefined) {
-    input.write(data);
-    input.end();
-  } else {
+  if (_.isUndefined(data)) {
     return input;
   }
+
+  input.write(data);
+  input.end();
 }
 
 function executeCli(options, data, callback) {
   var env = {
+    // eslint-disable-next-line no-process-env
     PATH: path.dirname(process.execPath) + path.delimiter + process.env.PATH
   };
   var cwd = root;
@@ -72,23 +73,25 @@ function executeCli(options, data, callback) {
     stdin: input
   }, function (err, stdout, stderr) {
     if (err) {
-      var l = stderr.trim().split('\n').shift();
-      var e = new Error(l);
+      var e = new Error(stderr
+        .trim()
+        .split('\n')
+        .shift());
 
       e.code = err.code;
 
       return callback(e);
     }
 
-    callback(undefined, stdout);
+    return callback(null, stdout);
   });
 
-  if (data !== undefined) {
-    input.write(data);
-    input.end();
-  } else {
+  if (_.isUndefined(data)) {
     return input;
   }
+
+  input.write(data);
+  input.end();
 }
 
 function runTests(execute) {
@@ -104,17 +107,18 @@ function runTests(execute) {
       }
 
       expect(data).to.equal(DATA + '\n');
-      done();
+
+      return done();
     });
   });
 
   it('executes commands on multiline streams with a flag', function (done) {
     var DATA = util.format(
-            '%s\n%s\n%s',
-            JSON.stringify({ example: 'json' }),
-            JSON.stringify({ more: 'json' }),
-            JSON.stringify({ yay: 'pineapples' })
-        );
+      '%s\n%s\n%s',
+      JSON.stringify({ example: 'json' }),
+      JSON.stringify({ more: 'json' }),
+      JSON.stringify({ yay: 'pineapples' })
+    );
 
     execute({
       command: 'echo',
@@ -127,7 +131,8 @@ function runTests(execute) {
       }
 
       expect(data).to.equal(DATA + '\n');
-      done();
+
+      return done();
     });
   });
 
@@ -154,7 +159,8 @@ function runTests(execute) {
       }
 
       expect(data).to.equal(JSON_DATA.join('\n') + '\n');
-      done();
+
+      return done();
     });
   });
 
@@ -181,17 +187,18 @@ function runTests(execute) {
       }
 
       expect(data).to.equal(JSON_DATA.join('\n') + '\n');
-      done();
+
+      return done();
     });
   });
 
   it('multiline mode does not print anything when the command returns no data', function (done) {
     var DATA = util.format(
-            '%s\n%s\n%s',
-            JSON.stringify({ example: 'json' }),
-            JSON.stringify({ example: 'pants' }),
-            JSON.stringify({ yay: 'pineapples' })
-        );
+      '%s\n%s\n%s',
+      JSON.stringify({ example: 'json' }),
+      JSON.stringify({ example: 'pants' }),
+      JSON.stringify({ yay: 'pineapples' })
+    );
 
     execute({
       command: 'pluck',
@@ -205,7 +212,8 @@ function runTests(execute) {
       }
 
       expect(data).to.equal(util.format('%s\n%s\n', 'json', 'pants'));
-      done();
+
+      return done();
     });
   });
 
@@ -223,7 +231,8 @@ function runTests(execute) {
       }
 
       expect(data).to.equal(JSON.stringify(DATA, false, 4) + '\n');
-      done();
+
+      return done();
     });
   });
 
@@ -241,7 +250,7 @@ function runTests(execute) {
 
       expect(data.toString().trim()).to.equal(json);
 
-      done();
+      return done();
     });
 
     var counter = 0;
@@ -278,7 +287,7 @@ function runTests(execute) {
 
       expect(data.toString().trim()).to.equal(json);
 
-      done();
+      return done();
     });
 
     var counter = 0;
@@ -304,7 +313,7 @@ function runTests(execute) {
     execute({
       command: 'echo',
       argv: {}
-    }, 'definitely not json', function (err, data) {
+    }, 'definitely not json', function (err) {
       expect(err).to.be.instanceOf(Error);
       expect(err.toString()).to.match(/SyntaxError/);
 
@@ -382,7 +391,7 @@ function runTests(execute) {
   describe('command:', function () {
     function testCommand(command, opts, done) {
       var DATA = opts.data;
-      var OUT = opts.out !== undefined ? opts.out : DATA;
+      var OUT = _.isUndefined(opts.out) ? DATA : opts.out;
       var ERROR = !!opts.error;
       var argv = opts.opts;
 
@@ -400,10 +409,10 @@ function runTests(execute) {
           return done(err);
         }
 
-                // there should always be a new line at the end
+        // there should always be a new line at the end
         expect(out).to.equal(OUT + '\n');
 
-        done();
+        return done();
       });
     }
 
