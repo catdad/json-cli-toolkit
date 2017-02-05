@@ -12,6 +12,8 @@ var root = require('rootrequire');
 
 var toolkit = require('../toolkit.js');
 
+var undef = _.noop();
+
 function toJson(data) {
   return JSON.stringify(data);
 }
@@ -35,12 +37,12 @@ function executeApi(options, data, callback) {
     return callback(null, dataBuff.toString());
   });
 
-  if (_.isUndefined(data)) {
-    return input;
+  if (!_.isUndefined(data)) {
+    input.write(data);
+    input.end();
   }
 
-  input.write(data);
-  input.end();
+  return input;
 }
 
 function executeCli(options, data, callback) {
@@ -86,12 +88,12 @@ function executeCli(options, data, callback) {
     return callback(null, stdout);
   });
 
-  if (_.isUndefined(data)) {
-    return input;
+  if (!_.isUndefined(data)) {
+    input.write(data);
+    input.end();
   }
 
-  input.write(data);
-  input.end();
+  return input;
 }
 
 function runTests(execute) {
@@ -243,7 +245,7 @@ function runTests(execute) {
 
     var input = execute({
       command: 'echo'
-    }, undefined, function (err, data) {
+    }, undef, function (err, data) {
       if (err) {
         return done(err);
       }
@@ -280,7 +282,7 @@ function runTests(execute) {
       argv: {
         multiline: true
       }
-    }, undefined, function (err, data) {
+    }, undef, function (err, data) {
       if (err) {
         return done(err);
       }
