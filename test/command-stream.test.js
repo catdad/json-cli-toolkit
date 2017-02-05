@@ -7,209 +7,210 @@ var _ = require('lodash');
 
 var commandStream = require('../lib/command-stream.js');
 
-describe('[command-stream]', function() {
-    it('calls the data function once for each written item', function(done) {
-        var input = through();
-        var OPTS = { some: 'pineapples' };
-        var DATA = ['1', '2', '3'];
+describe('[command-stream]', function () {
+  it('calls the data function once for each written item', function (done) {
+    var input = through();
+    var OPTS = { some: 'pineapples' };
+    var DATA = ['1', '2', '3'];
 
-        var count = 0;
-        var out = 0;
+    var count = 0;
+    var out = 0;
 
-        var stream = commandStream(function(data, opts) {
-            expect(data.toString()).to.equal(DATA[count]);
-            expect(opts).to.equal(OPTS);
+    var stream = commandStream(function (data, opts) {
+      expect(data.toString()).to.equal(DATA[count]);
+      expect(opts).to.equal(OPTS);
 
-            count += 1;
+      count += 1;
 
-            return data;
-        })(OPTS).on('data', function() {
-            out += 1;
-        }).on('end', function() {
-            expect(count).to.equal(out).and.to.equal(DATA.length);
+      return data;
+    })(OPTS).on('data', function () {
+      out += 1;
+    }).on('end', function () {
+      expect(count).to.equal(out).and.to.equal(DATA.length);
 
-            done();
-        });
-
-        input.pipe(stream);
-
-        DATA.forEach(function(val) {
-            input.write(val);
-        });
-        input.end();
+      done();
     });
 
-    it('writes data returned by the data function to output', function(done) {
-        var input = through();
-        var OPTS = { some: 'pineapples' };
-        var DATA = ['1', '2', '3'];
-        var OUT = [];
+    input.pipe(stream);
 
-        var count = 0;
+    DATA.forEach(function (val) {
+      input.write(val);
+    });
+    input.end();
+  });
 
-        var stream = commandStream(function(data, opts) {
-            expect(data.toString()).to.equal(DATA[count]);
-            expect(opts).to.equal(OPTS);
+  it('writes data returned by the data function to output', function (done) {
+    var input = through();
+    var OPTS = { some: 'pineapples' };
+    var DATA = ['1', '2', '3'];
+    var OUT = [];
 
-            var output = Math.random().toString(36);
-            OUT[count] = output;
+    var count = 0;
 
-            count += 1;
+    var stream = commandStream(function (data, opts) {
+      expect(data.toString()).to.equal(DATA[count]);
+      expect(opts).to.equal(OPTS);
 
-            return output;
-        })(OPTS).on('data', function(data) {
-            expect(data.toString()).to.equal(OUT[count - 1]);
-        }).on('end', done);
+      var output = Math.random().toString(36);
 
-        input.pipe(stream);
+      OUT[count] = output;
 
-        DATA.forEach(function(val) {
-            input.write(val);
-        });
-        input.end();
+      count += 1;
+
+      return output;
+    })(OPTS).on('data', function (data) {
+      expect(data.toString()).to.equal(OUT[count - 1]);
+    }).on('end', done);
+
+    input.pipe(stream);
+
+    DATA.forEach(function (val) {
+      input.write(val);
+    });
+    input.end();
+  });
+
+  it('skips writing if the data function returns undefined', function (done) {
+    var input = through();
+    var OPTS = { some: 'pineapples' };
+    var DATA = ['1', '0', '0'];
+
+    var count = 0;
+    var out = 0;
+
+    var stream = commandStream(function (data, opts) {
+      count += 1;
+
+      return Number(data.toString()) ? data : undefined;
+    })(OPTS).on('data', function (data) {
+      out += 1;
+
+      expect(data.toString()).to.equal(DATA[0]);
+    }).on('end', function () {
+      expect(count).to.equal(DATA.length);
+      expect(out).to.equal(1);
+
+      done();
     });
 
-    it('skips writing if the data function returns undefined', function(done) {
-        var input = through();
-        var OPTS = { some: 'pineapples' };
-        var DATA = ['1', '0', '0'];
+    input.pipe(stream);
 
-        var count = 0;
-        var out = 0;
-
-        var stream = commandStream(function(data, opts) {
-            count += 1;
-
-            return !!Number(data.toString()) ? data : undefined;
-        })(OPTS).on('data', function(data) {
-            out += 1;
-
-            expect(data.toString()).to.equal(DATA[0]);
-        }).on('end', function() {
-            expect(count).to.equal(DATA.length);
-            expect(out).to.equal(1);
-
-            done();
-        });
-
-        input.pipe(stream);
-
-        DATA.forEach(function(val) {
-            input.write(val);
-        });
-        input.end();
+    DATA.forEach(function (val) {
+      input.write(val);
     });
+    input.end();
+  });
 
-    it('uses an object stream', function(done) {
-        var input = through.obj();
-        var OPTS = { some: 'pineapples' };
-        var DATA = [
+  it('uses an object stream', function (done) {
+    var input = through.obj();
+    var OPTS = { some: 'pineapples' };
+    var DATA = [
             { fruit: 'pineapple' },
             { vegetable: 'cucumber' },
             { nut: 'pistachio' }
-        ];
+    ];
 
-        var count = 0;
+    var count = 0;
 
-        var stream = commandStream(function(data, opts) {
-            expect(data).to.be.an('object').and.to.equal(DATA[count]);
-            count += 1;
+    var stream = commandStream(function (data, opts) {
+      expect(data).to.be.an('object').and.to.equal(DATA[count]);
+      count += 1;
 
-            return data;
-        })(OPTS).on('data', _.noop).on('end', function() {
-            expect(count).to.equal(DATA.length);
+      return data;
+    })(OPTS).on('data', _.noop).on('end', function () {
+      expect(count).to.equal(DATA.length);
 
-            done();
-        });
-
-        input.pipe(stream);
-
-        DATA.forEach(function(val) {
-            input.push(val);
-        });
-        input.end();
+      done();
     });
 
-    it('has an optional flush function', function(done) {
-        var input = through();
-        var OPTS = { some: 'pineapples' };
-        var DATA = ['1', '2', '3'];
+    input.pipe(stream);
 
-        var flushFinished = false;
+    DATA.forEach(function (val) {
+      input.push(val);
+    });
+    input.end();
+  });
 
-        var stream = commandStream(function dataFn(data, opts) {
-            expect(opts).to.equal(OPTS);
+  it('has an optional flush function', function (done) {
+    var input = through();
+    var OPTS = { some: 'pineapples' };
+    var DATA = ['1', '2', '3'];
 
-            return data;
-        }, function flushFn(opts, cb) {
-            expect(opts).to.equal(OPTS);
-            expect(cb).to.be.a('function');
+    var flushFinished = false;
 
-            setTimeout(function() {
-                flushFinished = true;
-                cb();
-            }, 2);
+    var stream = commandStream(function dataFn(data, opts) {
+      expect(opts).to.equal(OPTS);
 
-        })(OPTS).on('data', _.noop).on('end', function() {
-            expect(flushFinished).to.equal(true);
+      return data;
+    }, function flushFn(opts, cb) {
+      expect(opts).to.equal(OPTS);
+      expect(cb).to.be.a('function');
 
-            done();
-        });
+      setTimeout(function () {
+        flushFinished = true;
+        cb();
+      }, 2);
 
-        input.pipe(stream);
+    })(OPTS).on('data', _.noop).on('end', function () {
+      expect(flushFinished).to.equal(true);
 
-        DATA.forEach(function(val) {
-            input.write(val);
-        });
-        input.end();
+      done();
     });
 
-    it('can push more data to the stream from the flush method', function(done) {
-        var input = through();
-        var OPTS = { some: 'pineapples' };
-        var DATA = ['1', '2', '3'];
+    input.pipe(stream);
 
-        var out = 0;
+    DATA.forEach(function (val) {
+      input.write(val);
+    });
+    input.end();
+  });
 
-        var stream = commandStream(function dataFn(data, opts) {
-            expect(opts).to.equal(OPTS);
+  it('can push more data to the stream from the flush method', function (done) {
+    var input = through();
+    var OPTS = { some: 'pineapples' };
+    var DATA = ['1', '2', '3'];
 
-            return data;
-        }, function flushFn(opts, cb) {
-            expect(opts).to.equal(OPTS);
-            expect(cb).to.be.a('function');
+    var out = 0;
 
-            this.push('4');
-            this.push('5');
+    var stream = commandStream(function dataFn(data, opts) {
+      expect(opts).to.equal(OPTS);
 
-            cb();
-        })(OPTS).on('data', function() {
-            out += 1;
-        }).on('end', function() {
-            expect(out).to.equal(DATA.length + 2);
+      return data;
+    }, function flushFn(opts, cb) {
+      expect(opts).to.equal(OPTS);
+      expect(cb).to.be.a('function');
 
-            done();
-        });
+      this.push('4');
+      this.push('5');
 
-        input.pipe(stream);
+      cb();
+    })(OPTS).on('data', function () {
+      out += 1;
+    }).on('end', function () {
+      expect(out).to.equal(DATA.length + 2);
 
-        DATA.forEach(function(val) {
-            input.write(val);
-        });
-        input.end();
+      done();
     });
 
-    it('returns a function that has an _isCommandStream boolean set to true', function() {
-        var val = commandStream(_.noop);
+    input.pipe(stream);
 
-        expect(val).to.be.a('function');
-        expect(val).to.have.property('_isCommandStream').and.to.equal(true);
+    DATA.forEach(function (val) {
+      input.write(val);
     });
+    input.end();
+  });
 
-    it('does not wrap a function that already produces a command stream', function() {
-        var val = commandStream(_.noop);
-        var val2 = commandStream(val);
+  it('returns a function that has an _isCommandStream boolean set to true', function () {
+    var val = commandStream(_.noop);
 
-        expect(val2).to.equal(val);
-    });
+    expect(val).to.be.a('function');
+    expect(val).to.have.property('_isCommandStream').and.to.equal(true);
+  });
+
+  it('does not wrap a function that already produces a command stream', function () {
+    var val = commandStream(_.noop);
+    var val2 = commandStream(val);
+
+    expect(val2).to.equal(val);
+  });
 });
