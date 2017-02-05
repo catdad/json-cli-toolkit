@@ -5,8 +5,11 @@ var sequence = require('gulp-sequence');
 var istanbul = require('gulp-istanbul');
 var gutil = require('gulp-util');
 var argv = require('yargs')
+  .boolean('lint')
   .default('lint', true)
+  .boolean('coverage')
   .default('coverage', true)
+  .boolean('fast')
   .default('fast', false)
   .argv;
 
@@ -23,7 +26,7 @@ var source = (function () {
 // no clue if this is a good idea or not yet
 var wrapped = (function (g) {
   function wrap(stream) {
-    var eventualExitOnError = false;
+    var gracefulError = false;
 
     var pipe = stream.pipe.bind(stream);
     var emit = stream.emit.bind(stream);
@@ -36,7 +39,7 @@ var wrapped = (function (g) {
     // overload emit function in case this stream is allowed
     // to ignore errors in the future
     stream.emit = function (name, err) {
-      if (name !== 'error' || eventualExitOnError === false) {
+      if (name !== 'error' || gracefulError === false) {
         return emit.apply(null, arguments);
       }
 
@@ -56,8 +59,8 @@ var wrapped = (function (g) {
     // when calling continue, we will allow this stream
     // to swallow errors, and instead set the exitCode
     // for when the build eventually exits
-    stream.continue = function () {
-      eventualExitOnError = true;
+    stream.graceful = function (val) {
+      gracefulError = typeof val === 'boolean' ? val : true;
 
       return stream;
     };
@@ -65,13 +68,16 @@ var wrapped = (function (g) {
     return stream;
   }
 
-  var src = g.src.bind(g);
+  // this is where gulp builds start, so wrap the
+  // resulting stream, allowing all streams in the
+  // pipeline to be wrapped as well
+  g.src = (function (src) {
+    return function () {
+      var stream = src.apply(null, arguments);
 
-  g.src = function () {
-    var stream = src.apply(null, arguments);
-
-    return wrap(stream);
-  };
+      return wrap(stream);
+    };
+  }(g.src.bind(g)));
 
   return g;
 }(gulp));
@@ -85,7 +91,7 @@ gulp.task('lint', function () {
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
-    .continue();
+    .graceful(!argv.fast);
 });
 
 gulp.task('coverage-instrument', function () {
@@ -111,13 +117,13 @@ gulp.task('coverage-report', function () {
         each: 90
       }
     }))
-    .continue();
+    .graceful(!argv.fast);
 });
 
 gulp.task('mocha', function () {
   return wrapped.src(source.test)
     .pipe(mocha())
-    .continue();
+    .graceful(!argv.fast);
 });
 
 gulp.task('coverage', sequence('coverage-instrument', 'mocha', 'coverage-report'));
