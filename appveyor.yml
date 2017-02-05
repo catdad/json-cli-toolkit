@@ -26,7 +26,6 @@ test_script:
 
 # scripts to run after tests
 after_test:
-  - npm run coverage
   - set CODECLIMATE_REPO_TOKEN=0bc4f040eb2e410552e061cb003eaef5ea1f05d23f2dec59604f2ae5cb4eb841
   - npm run cov-report
 
