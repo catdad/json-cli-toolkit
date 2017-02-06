@@ -26,6 +26,7 @@ module.exports = function (gulp) {
 
       // wrap the original error... because?
       var logErr = new gutil.PluginError(PLUGIN_NAME, err);
+
       // log that this error happened
       gutil.log(logErr.toString());
 
