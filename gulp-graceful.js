@@ -2,6 +2,8 @@
 
 var gutil = require('gulp-util');
 
+var PLUGIN_NAME = 'graceful-gulp';
+
 // no clue if this is a good idea or not yet
 module.exports = function (gulp) {
   function wrap(stream) {
@@ -22,8 +24,9 @@ module.exports = function (gulp) {
         return emit.apply(null, arguments);
       }
 
-      var logErr = new gutil.PluginError('wrapper', err);
-
+      // wrap the original error... because?
+      var logErr = new gutil.PluginError(PLUGIN_NAME, err);
+      // log that this error happened
       gutil.log(logErr.toString());
 
       // set the exit code, so that whenever the build
