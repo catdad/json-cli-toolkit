@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// these things are okay, because CLI
+/* eslint-disable no-process-exit, no-console */
+
 var through = require('through2');
 
 var argv = require('../lib/argv.js');
