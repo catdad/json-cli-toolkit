@@ -1,4 +1,5 @@
-var gulp = require('./gulp-graceful.js')(require('gulp'));
+var gulp = require('gulp');
+var graceful = require('gulp-graceful-error');
 var eslint = require('gulp-eslint');
 var mocha = require('gulp-mocha');
 var sequence = require('gulp-sequence');
@@ -28,6 +29,7 @@ gulp.task('lint', function () {
   }
 
   return gulp.src(source.js)
+    .pipe(graceful())
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
@@ -50,6 +52,7 @@ gulp.task('coverage-report', function () {
   }
 
   return gulp.src(source.test)
+    .pipe(graceful())
     .pipe(istanbul.writeReports())
     .pipe(istanbul.enforceThresholds({
       thresholds: {
@@ -62,6 +65,7 @@ gulp.task('coverage-report', function () {
 
 gulp.task('mocha', function () {
   return gulp.src(source.test)
+    .pipe(graceful())
     .pipe(mocha())
     .graceful(!argv.fast);
 });
