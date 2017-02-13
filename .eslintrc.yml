@@ -6,6 +6,11 @@ rules:
 
   vars-on-top: off
 
+  # these are usually a bad idea, but I'ma
+  # enable them here because reasons
+  no-param-reassign: off
+  no-plusplus: off
+
   # Enforce valid JSDoc comments
   # http://eslint.org/docs/rules/valid-jsdoc
 #  valid-jsdoc:
