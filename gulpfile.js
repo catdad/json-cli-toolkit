@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var graceful = require('gulp-graceful-error');
-var eslint = require('gulp-eslint');
 var mocha = require('gulp-mocha');
 var sequence = require('gulp-sequence');
 var istanbul = require('gulp-istanbul');
@@ -13,6 +12,16 @@ var argv = require('yargs')
   .default('fast', false)
   .argv;
 
+var eslint;
+var nodeMajor = process.version.match(/v([0-9]+)\./);
+
+nodeMajor = nodeMajor ? nodeMajor[1] : null;
+
+if (nodeMajor >= 4) {
+  // eslint-disable-next-line global-require
+  eslint = require('gulp-eslint');
+}
+
 var source = (function () {
   var src = {};
 
@@ -24,6 +33,13 @@ var source = (function () {
 }());
 
 gulp.task('lint', function () {
+  if (!eslint) {
+    // eslint-disable-next-line no-console
+    console.log('lint task is not available in node', process.version);
+
+    return null;
+  }
+
   if (!argv.lint) {
     return null;
   }
