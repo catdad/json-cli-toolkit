@@ -7,8 +7,7 @@
     "json": "bin/cli.js"
   },
   "scripts": {
-    "test": "mocha -R spec",
-    "coverage": "istanbul cover --dir coverage node_modules/mocha/bin/_mocha",
+    "test": "gulp test",
     "cov-report": "codeclimate-test-reporter < coverage/lcov.info"
   },
   "repository": {
@@ -30,8 +29,15 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "codeclimate-test-reporter": "^0.4.0",
+    "eslint-config-stezu": "^1.0.1",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-graceful-error": "^1.0.0",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-mocha": "^3.0.1",
+    "gulp-sequence": "^0.4.6",
+    "gulp-util": "^3.0.8",
     "istanbul": "^0.4.3",
-    "mocha": "^3.0.2",
     "rootrequire": "^1.0.0",
     "shellton": "^3.0.0"
   },

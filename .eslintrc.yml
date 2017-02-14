@@ -1,0 +1,26 @@
+extends: stezu/es5
+env:
+  es6: false
+
+rules:
+
+  vars-on-top: off
+
+  # these are usually a bad idea, but I'ma
+  # enable them here because reasons
+  no-param-reassign: off
+  no-plusplus: off
+
+  # Enforce valid JSDoc comments
+  # http://eslint.org/docs/rules/valid-jsdoc
+#  valid-jsdoc:
+#    - error
+
+  # Require JSDoc comments
+  # http://eslint.org/docs/rules/require-jsdoc
+#  require-jsdoc:
+#    - error
+#    - require:
+#      FunctionDeclaration: true
+#      MethodDefinition: true
+#      ClassDeclaration: true

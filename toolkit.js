@@ -8,75 +8,84 @@ var commands = require('./lib/command.js');
 var util = require('./lib/util.js');
 
 function printer(prettyPrint) {
-    return function printJson(obj) {
-        if (prettyPrint) {
-            return JSON.stringify(obj, false, 4);
-        } else {
-            return JSON.stringify(obj);
-        }
-    };
+  return function printJson(obj) {
+    if (prettyPrint) {
+      return JSON.stringify(obj, false, 4);
+    }
+
+    return JSON.stringify(obj);
+
+  };
 }
 
 function validateCommand(command) {
-    return !!commands[command];
+  return !!commands[command];
 }
 
 function commandStream(command, opts) {
-    return commands[command](opts);
+  return commands[command](opts);
 }
 
 function emitAsync(stream, event, data) {
-    setImmediate(stream.emit.bind(stream), event, data);
+  setImmediate(stream.emit.bind(stream), event, data);
 }
 
-module.exports = function(options) {
-    var command = options.command;
-    var input = options.input;
-    var output = options.output;
-    var opts = options.argv;
+function serializerStream(pretty) {
+  var printJson = printer(pretty);
 
-    if (!validateCommand(command)) {
-        // make sure this is async, because sometimes people call
-        // a command before registering error handlers on it
-        return emitAsync(output, 'error', new Error('"' + command + '" is not a known command'));
+  function serialize(data) {
+    if (arguments.length > 1) {
+      return serialize(data) + serialize.apply(null, [].slice.call(arguments, 1));
     }
 
-    var printJson = printer(opts.pretty);
-
-    function serialize(data) {
-        if (arguments.length > 1) {
-            return serialize(data) + serialize.apply(null, [].slice.call(arguments, 1));
-        }
-
-        if (_.isString(data)) {
-            return data;
-        }
-
-        return printJson(data);
+    if (_.isString(data)) {
+      return data;
     }
 
-    var wroteOutput = false;
+    return printJson(data);
+  }
 
-    ns.pipeline(
-        input,
-        (opts.multiline) ? ns.split() : ns.wait(),
-        util.transform(opts),
-        commandStream(command, opts),
-        through.obj(function onData(data, enc, cb) {
-            if (data !== undefined) {
-                wroteOutput = true;
-                this.push(serialize(data, '\n'));
-            }
+  var wroteOutput = false;
 
-            cb();
-        }, function onFlush(cb) {
-            if (!wroteOutput) {
-                this.push('\n');
-            }
+  return through.obj(function OnData(data, enc, cb) {
+    if (!_.isUndefined(data)) {
+      wroteOutput = true;
+      this.push(serialize(data, '\n'));
+    }
 
-            cb(null);
-        })
-    ).on('error', function (err) {
-        output.emit('error', err);
-    }).pipe(output);
+    cb();
+  }, function OnFlush(cb) {
+    if (!wroteOutput) {
+      this.push('\n');
+    }
+
+    cb(null);
+  });
+}
+
+module.exports = function (options) {
+  var command = options.command;
+  var input = options.input;
+  var output = options.output;
+  var opts = options.argv;
+
+  if (!validateCommand(command)) {
+    // make sure this is async, because sometimes people call
+    // a command before registering error handlers on it
+    emitAsync(output, 'error', new Error('"' + command + '" is not a known command'));
+
+    return;
+  }
+
+  ns.pipeline(
+    input,
+    opts.multiline ? ns.split() : ns.wait(),
+    util.transform(opts),
+    commandStream(command, opts),
+    serializerStream(opts.pretty)
+  )
+    .on('error', function (err) {
+      output.emit('error', err);
+    })
+    .pipe(output);
 };
