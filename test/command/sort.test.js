@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var _ = require('lodash');
 var ns = require('node-stream');
-var through = require('through2');
+var through = ns.through;
 
 var sort = require('../../lib/command/sort.js');
 
