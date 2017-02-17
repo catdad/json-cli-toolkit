@@ -1,8 +1,8 @@
 /* jshint node: true, mocha: true */
 
 var expect = require('chai').expect;
-var through = require('through2');
 var ns = require('node-stream');
+var through = ns.through;
 
 var util = require('../lib/util.js');
 

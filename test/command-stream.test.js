@@ -1,7 +1,7 @@
 /* jshint node: true, mocha: true */
 
 var expect = require('chai').expect;
-var through = require('through2');
+var through = require('node-stream').through;
 var _ = require('lodash');
 
 var commandStream = require('../lib/command-stream.js');

@@ -5,10 +5,10 @@ var util = require('util');
 
 var expect = require('chai').expect;
 var _ = require('lodash');
-var through = require('through2');
-var ns = require('node-stream');
 var shellton = require('shellton');
 var root = require('rootrequire');
+var ns = require('node-stream');
+var through = ns.through;
 
 var toolkit = require('../toolkit.js');
 

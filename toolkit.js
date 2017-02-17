@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var ns = require('node-stream');
-var through = require('through2');
+var through = ns.through;
 
 var commands = require('./lib/command.js');
 var util = require('./lib/util.js');
