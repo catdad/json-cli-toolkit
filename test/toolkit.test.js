@@ -98,7 +98,7 @@ function executeCli(options, data, callback) {
 
 function runTests(execute) {
   it('takes and input and output streams', function (done) {
-        // single line of json
+    // single line of json
     var DATA = JSON.stringify({ example: 'json' });
 
     execute({
@@ -501,7 +501,7 @@ function runTests(execute) {
             attr: 'name'
           }
         },
-                // what is a negative test here?
+        // what is a negative test here?
         negative: {
           data: '{}',
           out: JSON.stringify({ 'undefined': {} }),
