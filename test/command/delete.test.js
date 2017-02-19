@@ -5,8 +5,10 @@ var del = require('../../lib/command/delete.js');
 
 describe('[delete]', function () {
   it('returns the object with the value removed', function () {
-    var OBJ = { one: 2,
-      three: 4 };
+    var OBJ = {
+      one: 2,
+      three: 4
+    };
 
     var val = del(OBJ, {
       attr: 'three'
@@ -17,9 +19,13 @@ describe('[delete]', function () {
   });
 
   it('can delete nested properties', function () {
-    var OBJ = { one: 2,
-      three: { four: 5,
-        six: 7 } };
+    var OBJ = {
+      one: 2,
+      three: {
+        four: 5,
+        six: 7
+      }
+    };
 
     var val = del(OBJ, {
       attr: 'three.four'
@@ -27,13 +33,15 @@ describe('[delete]', function () {
 
     expect(val).to.equal(OBJ);
     expect(val).to.have.property('three')
-            .and.to.be.an('object')
-            .and.to.not.have.property('four');
+      .and.to.be.an('object')
+      .and.to.not.have.property('four');
   });
 
   it('can delete falsy values', function () {
-    var OBJ = { one: 2,
-      two: 0 };
+    var OBJ = {
+      one: 2,
+      two: 0
+    };
 
     var val = del(OBJ, {
       attr: 'two'
@@ -55,9 +63,7 @@ describe('[delete]', function () {
     });
 
     expect(val).to.equal(OBJ);
-    expect(val).to.deep.equal({
-      five: 6
-    });
+    expect(val).to.deep.equal({ five: 6 });
   });
 
   it('returns the object unmodified if attr does not exist', function () {

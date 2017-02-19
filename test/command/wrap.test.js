@@ -11,7 +11,7 @@ describe('[wrap]', function () {
     };
 
     expect(wrap(OBJ, opts)).to.have.property('name')
-            .and.to.equal(OBJ);
+      .and.to.equal(OBJ);
   });
 
   it('can wrap using a nested property', function () {

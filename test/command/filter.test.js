@@ -24,9 +24,9 @@ describe('[filter]', function () {
 
     var val = filter(OBJ, clone);
 
-        // `succeed` tells us that the original options,
-        // before adding the `not` were expected to
-        // succeed
+    // `succeed` tells us that the original options,
+    // before adding the `not` were expected to
+    // succeed
     if (succeed) {
       expect(val).to.not.equal(OBJ);
     } else {
@@ -97,32 +97,42 @@ describe('[filter]', function () {
 
     createTests([{
       obj: { example: 'pants' },
-      opts: { attr: 'example',
-        equals: 'pants' },
+      opts: {
+        attr: 'example',
+        equals: 'pants'
+      },
       succeed: true,
       msg: 'the object if property equals a specific string'
     }, {
       obj: { nested: { prop: 'pants' } },
-      opts: { attr: 'nested.prop',
-        equals: 'pants' },
+      opts: {
+        attr: 'nested.prop',
+        equals: 'pants'
+      },
       succeed: true,
       msg: 'the object if a nested property equals a specific string'
     }, {
       obj: { example: 'pants' },
-      opts: { attr: 'not',
-        equals: 'undefined' },
+      opts: {
+        attr: 'not',
+        equals: 'undefined'
+      },
       succeed: true,
       msg: 'the object if the property is undefined and equals is "undefined"'
     }, {
       obj: { example: null },
-      opts: { attr: 'example',
-        equals: 'null' },
+      opts: {
+        attr: 'example',
+        equals: 'null'
+      },
       succeed: true,
       msg: 'the object if the property is null and equals is "null"'
     }, {
       obj: { not: 'pants' },
-      opts: { attr: 'not',
-        equals: 'shirts' },
+      opts: {
+        attr: 'not',
+        equals: 'shirts'
+      },
       succeed: false,
       msg: 'undefined if the property is present but not equal'
     }]);
@@ -133,28 +143,36 @@ describe('[filter]', function () {
 
     createTests([{
       obj: { example: 'pants' },
-      opts: { attr: 'example',
-        matches: '^p' },
+      opts: {
+        attr: 'example',
+        matches: '^p'
+      },
       succeed: true,
       msg: 'the object if the property matches a specific regular expression'
     }, {
       obj: { nested: { prop: 'pants' } },
-      opts: { attr: 'nested.prop',
-        matches: '^p' },
+      opts: {
+        attr: 'nested.prop',
+        matches: '^p'
+      },
       succeed: true,
       msg: 'the object if a nested property equals a specific regular expression'
     }, {
-            // since yargs will parse numbers into a number, we have to make
-            // sure that filter correctly uses that number in the regex
+      // since yargs will parse numbers into a number, we have to make
+      // sure that filter correctly uses that number in the regex
       obj: { one: 1 },
-      opts: { attr: 'one',
-        matches: 1 },
+      opts: {
+        attr: 'one',
+        matches: 1
+      },
       succeed: true,
       msg: 'the object if the regular expression is a number'
     }, {
       obj: { not: 'pants' },
-      opts: { attr: 'not',
-        matches: 'p$' },
+      opts: {
+        attr: 'not',
+        matches: 'p$'
+      },
       succeed: false,
       msg: 'undefined if the property is present but doesn\'t match'
     }]);

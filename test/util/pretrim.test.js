@@ -6,7 +6,7 @@ var pretrim = require('../../lib/util.js').pretrim;
 
 describe('[pretrim]', function () {
   it('removes plain text before a json object', function () {
-    var DATA = JSON.stringify({ example: 'pants'});
+    var DATA = JSON.stringify({ example: 'pants' });
 
     expect(pretrim('not json data: ' + DATA)).to.equal(DATA);
   });
