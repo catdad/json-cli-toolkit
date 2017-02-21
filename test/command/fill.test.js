@@ -1,3 +1,5 @@
+/* eslint-disable object-property-newline */
+
 var expect = require('chai').expect;
 var _ = require('lodash');
 
