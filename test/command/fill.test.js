@@ -5,7 +5,7 @@ var _ = require('lodash');
 
 var fill = require('../../lib/command/fill.js');
 
-describe.only('[fill]', function () {
+describe('[fill]', function () {
   function test(source, expected, opts) {
     var copy = _.cloneDeep(source);
     var actual = fill(copy, opts);
