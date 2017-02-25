@@ -31,7 +31,7 @@
     "eslint-config-stezu": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
-    "gulp-graceful-error": "^1.0.0",
+    "gulp-graceful-error": "^1.1.0",
     "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^3.0.1",
     "gulp-sequence": "^0.4.6",
