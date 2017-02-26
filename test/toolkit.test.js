@@ -1,4 +1,5 @@
 /* jshint node: true, mocha: true */
+/* eslint-disable object-property-newline */
 
 var path = require('path');
 var util = require('util');
@@ -59,11 +60,14 @@ function executeCli(options, data, callback) {
       return memo + util.format(' --no-%s', key);
     } else if (_.isNumber(value)) {
       return memo + util.format(' --%s %s', key, value);
+    } else if (_.isArray(value)) {
+      return memo + util.format(' --%s ', key) + value.join(' ');
     }
 
     return memo + util.format(' --%s "%s"', key, value);
 
   }, options.command);
+
   var task = util.format('%s "%s" %s', 'node', cli, argv);
 
   var input = options.input || through();
@@ -522,6 +526,22 @@ function runTests(execute) {
           out: '',
           opts: {
             ignore: true
+          }
+        }
+      },
+      fill: {
+        positive: {
+          data: [{ a: 1, b: 2, c: { d: 1, e: 2 } }].map(toJson).join('\n'),
+          out: [{ a: 1, c: { e: 2 } }].map(toJson).join('\n'),
+          opts: {
+            include: ['a', 'c.e']
+          }
+        },
+        negative: {
+          data: [{ a: 1, b: 2, c: { d: 1, e: 2 } }].map(toJson).join('\n'),
+          out: [{ a: 1, c: { e: 2 } }].map(toJson).join('\n'),
+          opts: {
+            exclude: ['b', 'c.d']
           }
         }
       }
