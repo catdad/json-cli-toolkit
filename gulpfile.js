@@ -10,6 +10,8 @@ var argv = require('yargs')
   .default('coverage', true)
   .boolean('fast')
   .default('fast', false)
+  .boolean('start')
+  .default('start', true)
   .argv;
 
 var eslint;
@@ -96,4 +98,10 @@ gulp.task('test', function (done) {
 
 gulp.task('watch', function () {
   gulp.watch([source.lib, source.test], ['test']);
+
+  if (argv.start) {
+    return gulp.start('test');
+  }
+
+  return null;
 });
