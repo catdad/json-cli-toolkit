@@ -10,6 +10,8 @@ var argv = require('yargs')
   .default('coverage', true)
   .boolean('fast')
   .default('fast', false)
+  .boolean('start')
+  .default('start', true)
   .argv;
 
 var eslint;
@@ -86,6 +88,20 @@ gulp.task('mocha', function () {
     .graceful(!argv.fast);
 });
 
-gulp.task('coverage', sequence('coverage-instrument', 'mocha', 'coverage-report'));
+gulp.task('coverage', function (done) {
+  sequence('coverage-instrument', 'mocha', 'coverage-report', done);
+});
 
-gulp.task('test', sequence('lint', 'coverage'));
+gulp.task('test', function (done) {
+  sequence('lint', 'coverage', done);
+});
+
+gulp.task('watch', function () {
+  gulp.watch([source.lib, source.test], ['test']);
+
+  if (argv.start) {
+    return gulp.start('test');
+  }
+
+  return null;
+});
