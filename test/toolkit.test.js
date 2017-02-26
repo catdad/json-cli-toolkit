@@ -3,6 +3,7 @@
 
 var path = require('path');
 var util = require('util');
+var os = require('os');
 
 var expect = require('chai').expect;
 var _ = require('lodash');
@@ -10,6 +11,7 @@ var shellton = require('shellton');
 var root = require('rootrequire');
 var ns = require('node-stream');
 var through = ns.through;
+var async = require('async');
 
 var toolkit = require('../toolkit.js');
 
@@ -395,28 +397,42 @@ function runTests(execute) {
   });
 
   describe('command:', function () {
-    function testCommand(command, opts, done) {
+    function execCommand(command, opts, done) {
       var DATA = opts.data;
-      var OUT = _.isUndefined(opts.out) ? DATA : opts.out;
-      var ERROR = !!opts.error;
       var argv = opts.opts;
 
       execute({
         command: command,
         argv: argv
-      }, DATA, function (err, out) {
-        if (ERROR) {
-          expect(err).to.be.instanceOf(Error);
+      }, DATA, done);
+    }
 
-          return done();
+    function assertCommand(err, out, opts) {
+      var DATA = opts.data;
+      var OUT = _.isUndefined(opts.out) ? DATA : opts.out;
+      var ERROR = !!opts.error;
+
+      if (ERROR) {
+        expect(err).to.be.instanceOf(Error);
+
+        return;
+      }
+
+      if (err) {
+        throw err;
+      }
+
+      // there should always be a new line at the end
+      expect(out).to.equal(OUT + '\n');
+    }
+
+    function testCommand(command, opts, done) {
+      execCommand(command, opts, function (err, out) {
+        try {
+          assertCommand(err, out, opts);
+        } catch (e) {
+          return done(e);
         }
-
-        if (err) {
-          return done(err);
-        }
-
-        // there should always be a new line at the end
-        expect(out).to.equal(OUT + '\n');
 
         return done();
       });
@@ -547,14 +563,57 @@ function runTests(execute) {
       }
     };
 
+    // we will run all the tests in parallel, and record the data
+    // to assert on later in each test
+    var asyncTasks = _.reduce(commands, function (memo, val, command) {
+      memo[command + '.positive'] = function (next) {
+        execCommand(command, val.positive, function (err, out) {
+          next(null, {
+            err: err,
+            out: out
+          });
+        });
+      };
+
+      memo[command + '.negative'] = function (next) {
+        execCommand(command, val.negative, function (err, out) {
+          next(null, {
+            err: err,
+            out: out
+          });
+        });
+      };
+
+      return memo;
+    }, {});
+
+    var results;
+
+    before(function Before(done) {
+      var cpus = os.cpus().length;
+      this.timeout(500 * cpus);
+
+      var start = Date.now();
+      async.parallelLimit(asyncTasks, cpus, function (err, data) {
+        console.log('before done in', Date.now() - start);
+
+        results = data;
+        done(err);
+      });
+    });
+
     _.forEach(commands, function (val, command) {
       describe(util.format('"%s"', command), function () {
-        it('positive test', function (done) {
-          testCommand(command, val.positive, done);
+        it('positive test', function () {
+          var data = results[command + '.positive'];
+
+          assertCommand(data.err, data.out, val.positive);
         });
 
-        it('negative test', function (done) {
-          testCommand(command, val.negative, done);
+        it('negative test', function () {
+          var data = results[command + '.negative'];
+
+          assertCommand(data.err, data.out, val.negative);
         });
       });
     });
@@ -565,6 +624,6 @@ describe('[toolkit]', function () {
   runTests(executeApi);
 });
 
-describe('[cli]', function () {
+describe.only('[cli]', function () {
   runTests(executeCli);
 });
