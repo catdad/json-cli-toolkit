@@ -580,7 +580,9 @@ function runTests(execute) {
     before(function Before(done) {
       var cpus = os.cpus().length;
 
-      this.timeout(500 * cpus);
+      // this time should be way too much, even for appveyor,
+      // but I want to make sure this doesn't just time out
+      this.timeout(500 * _.keys(asyncTasks).length);
 
       async.parallelLimit(asyncTasks, cpus, function (err, data) {
         results = data;
