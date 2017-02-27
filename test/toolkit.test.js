@@ -426,18 +426,6 @@ function runTests(execute) {
       expect(out).to.equal(OUT + '\n');
     }
 
-    function testCommand(command, opts, done) {
-      execCommand(command, opts, function (err, out) {
-        try {
-          assertCommand(err, out, opts);
-        } catch (e) {
-          return done(e);
-        }
-
-        return done();
-      });
-    }
-
     var commands = {
       echo: {
         positive: {
@@ -591,12 +579,10 @@ function runTests(execute) {
 
     before(function Before(done) {
       var cpus = os.cpus().length;
+
       this.timeout(500 * cpus);
 
-      var start = Date.now();
       async.parallelLimit(asyncTasks, cpus, function (err, data) {
-        console.log('before done in', Date.now() - start);
-
         results = data;
         done(err);
       });
@@ -624,6 +610,6 @@ describe('[toolkit]', function () {
   runTests(executeApi);
 });
 
-describe.only('[cli]', function () {
+describe('[cli]', function () {
   runTests(executeCli);
 });
