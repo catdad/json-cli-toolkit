@@ -1,4 +1,4 @@
-version: {build}
+version: '{branch}-{build}'
 
 max_jobs: 4
 
