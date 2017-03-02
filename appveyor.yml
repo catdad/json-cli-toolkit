@@ -1,3 +1,7 @@
+version: {branch}-{build}
+
+max_jobs: 4
+
 environment:
   matrix:
     # node.js
