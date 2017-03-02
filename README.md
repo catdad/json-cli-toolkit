@@ -50,6 +50,7 @@ This will expose the command `json` in your path.
   * [`delete`](#json-delete)
   * [`echo`](#json-echo)
   * [`exec`](#json-exec)
+  * [`fill`](#json-fill)
   * [`filter`](#json-filter)
   * [`pluck`](#json-pluck)
   * [`set`](#json-set)
