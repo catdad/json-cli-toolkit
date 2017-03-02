@@ -157,9 +157,9 @@ json exec --multiline --code "if (obj.name !== 'thing') obj = undefined"
 
 Transform json input using a whitelist or blacklist of properties.
 
-`--exclude`: Optional, a list of properties to exlude, if present. This list is provided as space-separated properties. They can be top-level properties or nested properties using dot notation.
+`--exclude`: Optional. A list of properties to exlude, if present. This list is provided as space-separated properties. They can be top-level properties or nested properties using dot notation.
 
-`--include`: Optional, a list of proerties to include, if present. This list is provided as space-separated properties. They can be top-level properties or nested properties using dot notation.
+`--include`: Optional. A list of proerties to include, if present. This list is provided as space-separated properties. They can be top-level properties or nested properties using dot notation.
 
 **Examples:**
 
