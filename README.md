@@ -152,6 +152,24 @@ json exec --code "obj.newProp = obj.one + obj.two"
 json exec --multiline --code "if (obj.name !== 'thing') obj = undefined"
 ```
 
+#### `json fill`
+
+Transform json input using a whitelist or blacklist of properties.
+
+`--exclude`: A list of properties to exlude, if present. This list is provided as space-separated properties. They can be top-level properties or nested properties using dot notation.
+
+`--include`: A list of proerties to include, if present. This list is provided as space-separated properties. They can be top-level properties or nested properties using dot notation.
+
+**Examples:**
+
+```bash
+# Use a whitelist to transform the json input
+json fill --include thing nested.stuff
+
+# Use a blacklist to remove properties from the json
+json fill --exlude thing nested.stuff
+```
+
 #### `json filter`
 
 Filter only json input entries that match specific rules:
