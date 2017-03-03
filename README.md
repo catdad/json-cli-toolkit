@@ -169,7 +169,7 @@ json fill --include thing nested.stuff
 
 # Use a blacklist to remove properties from the json
 # all json objects
-json fill --multiline --exlude thing nested.stuff
+json fill --multiline --exclude thing nested.stuff
 ```
 
 #### `json filter`
