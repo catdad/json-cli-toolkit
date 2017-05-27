@@ -16,12 +16,16 @@ addons:
 after_script:
   - codeclimate-test-reporter < coverage/lcov.info
 
-deploy:
-  provider: npm
-  email: vatev.1+npm@gmail.com
-  api_key:
-    secure: bzlEZE+JvXmSfFbnI5czOJ2odThFGaku1gU4bd+F8bJYqQikRBzQzyGCyxcUjaMcl+YjPgqr9x7twKrArDZ/ntU80RFOBOpx0lf+v8I7JViJO+pb+UNROE8qdAcIQWs3GxmAQ6TrSEoKnWyJSkJ9hIt8P3H1WQBX8hm/dH4yIwCFNaOsCzxywRx6WuH8BDNTXDTb6L6kgOYn2lBG+pApNiJEwI4HeT9XvU0YMqyqvltcPdlTUXPs1gHjbHKKOAeYy1lhfEsLpvXXsTvrt8Dhnrpei+4eHkVR1M5R3KheUfsRgj5UvbRS5Ic24Va3+pBWFZTCXNks9x4AoDhXf8S9vJ7xm0bfd8ZwFz6rvLlCZN0s1N1XnfAtv4FWUeweUQx/97Ubtm9j8PAYECfCs97Jfb8D5djkH8sCG2tAKPLK7i0Tif3JhSg0k/ltd9MnU2Z0SY4VnJnyZngR2wI/DCVkeWf2gUJTT1+9kzWBvMIAuYcEcPpc6LwgB0+Zk+o0ZVcfBFiRmQeiXXusQ7Tdbbsn1m3Tzs8ucxJm6T00zdz1Dham6zBFdfjwLoP7Up85KPqGbCZjNIUwQRdMPs6kH5zNfXIK1lPgY41DmUPrayV/qzMlZVHrcBSrCImD8g2t5Klokp76aWBSh134dHa0TZRejbM/B8yia9W0UxKqmuZp6EY=
-  on:
-    tags: true
-    node: '6.9'
-    repo: catdad/json-cli-toolkit
+jobs:
+  include:
+    - stage: NPM Release
+      node_js: '6.9'
+      script: echo "Deploying to npm ..."
+      deploy:
+        provider: npm
+        email: vatev.1+npm@gmail.com
+        api_key:
+          secure: bzlEZE+JvXmSfFbnI5czOJ2odThFGaku1gU4bd+F8bJYqQikRBzQzyGCyxcUjaMcl+YjPgqr9x7twKrArDZ/ntU80RFOBOpx0lf+v8I7JViJO+pb+UNROE8qdAcIQWs3GxmAQ6TrSEoKnWyJSkJ9hIt8P3H1WQBX8hm/dH4yIwCFNaOsCzxywRx6WuH8BDNTXDTb6L6kgOYn2lBG+pApNiJEwI4HeT9XvU0YMqyqvltcPdlTUXPs1gHjbHKKOAeYy1lhfEsLpvXXsTvrt8Dhnrpei+4eHkVR1M5R3KheUfsRgj5UvbRS5Ic24Va3+pBWFZTCXNks9x4AoDhXf8S9vJ7xm0bfd8ZwFz6rvLlCZN0s1N1XnfAtv4FWUeweUQx/97Ubtm9j8PAYECfCs97Jfb8D5djkH8sCG2tAKPLK7i0Tif3JhSg0k/ltd9MnU2Z0SY4VnJnyZngR2wI/DCVkeWf2gUJTT1+9kzWBvMIAuYcEcPpc6LwgB0+Zk+o0ZVcfBFiRmQeiXXusQ7Tdbbsn1m3Tzs8ucxJm6T00zdz1Dham6zBFdfjwLoP7Up85KPqGbCZjNIUwQRdMPs6kH5zNfXIK1lPgY41DmUPrayV/qzMlZVHrcBSrCImD8g2t5Klokp76aWBSh134dHa0TZRejbM/B8yia9W0UxKqmuZp6EY=
+        on:
+          tags: true
+          repo: catdad/json-cli-toolkit
