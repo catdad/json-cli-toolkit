@@ -18,7 +18,7 @@ after_script:
 
 jobs:
   include:
-    - stage: NPM Release
+    - stage: npm release
       node_js: '6.9'
       script: echo "Deploying to npm ..."
       deploy:
