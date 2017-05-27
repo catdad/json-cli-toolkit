@@ -34,37 +34,24 @@ describe('[filter]', function () {
     }
   }
 
-  function runTests(defaultTests, notTests) {
-    defaultTests.forEach(function (func) {
-      func();
+  function createTests(testList) {
+    // make copies, just in case
+    var defaultList = _.cloneDeep(testList);
+    var notList = _.cloneDeep(testList);
+
+    defaultList.forEach(function (desc) {
+      it('returns ' + desc.msg, function () {
+        test(desc.obj, desc.opts, desc.succeed);
+      });
     });
 
     describe('--not', function () {
-      notTests.forEach(function (func) {
-        func();
-      });
-    });
-  }
-
-  function createTests(testList) {
-    var defaultTests = [];
-    var notTests = [];
-
-    testList.forEach(function (desc) {
-      defaultTests.push(function () {
-        it('returns ' + desc.msg, function () {
-          test(desc.obj, desc.opts, desc.succeed);
-        });
-      });
-
-      notTests.push(function () {
+      notList.forEach(function (desc) {
         it('does not return ' + desc.msg, function () {
           notTest(desc.obj, desc.opts, desc.succeed);
         });
       });
     });
-
-    runTests(defaultTests, notTests);
   }
 
   describe('--attr', function () {
@@ -176,6 +163,180 @@ describe('[filter]', function () {
       succeed: false,
       msg: 'undefined if the property is present but doesn\'t match'
     }]);
+
+  });
+
+  function invalidCompTest(name, opts, succeed) {
+    [{ b: 1 }, true, [1, 2, 3]].forEach(function (testval) {
+      it (name + testval.constructor.name, function () {
+        test({ val: testval }, opts, succeed);
+      });
+    });
+  }
+
+  describe('--attr --above', function () {
+
+    createTests([{
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 30
+      },
+      succeed: true,
+      msg: 'the object if a number value is above a number'
+    }, {
+      obj: { a: 'bananas' },
+      opts: {
+        attr: 'a',
+        above: 'apples'
+      },
+      succeed: true,
+      msg: 'the object if a string value is above a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 0
+      },
+      succeed: true,
+      msg: 'the object when 0 is used for the flag'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 120
+      },
+      succeed: false,
+      msg: 'undefined if a number value is below a number value'
+    }, {
+      obj: { a: 'apples' },
+      opts: {
+        attr: 'a',
+        above: 'bananas'
+      },
+      succeed: false,
+      msg: 'undefined if a string value is below a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 100
+      },
+      succeed: false,
+      msg: 'undefined if two number values are equal'
+    }, {
+      obj: { a: 'pineapples' },
+      opts: {
+        attr: 'a',
+        above: 'pineapples'
+      },
+      succeed: false,
+      msg: 'undefined if two string values are equal'
+    }]);
+
+    invalidCompTest(
+      'return undefined if the source value is: ',
+      {
+        attr: 'val',
+        above: 'anything'
+      },
+      false
+    );
+
+    describe('--not', function () {
+      invalidCompTest(
+        'return undefined if the source value is: ',
+        {
+          attr: 'val',
+          above: 'anything',
+          not: true
+        },
+        false
+      );
+    });
+
+  });
+
+  describe('--attr --below', function () {
+
+    createTests([{
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        below: 120
+      },
+      succeed: true,
+      msg: 'the object if a number value is below a number value'
+    }, {
+      obj: { a: 'apples' },
+      opts: {
+        attr: 'a',
+        below: 'bananas'
+      },
+      succeed: true,
+      msg: 'the object if a string value is below a string value'
+    }, {
+      obj: { a: -75 },
+      opts: {
+        attr: 'a',
+        below: 0
+      },
+      succeed: true,
+      msg: 'the object when 0 is used for the flag'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        below: 30
+      },
+      succeed: false,
+      msg: 'undefined if a number value is above a number value'
+    }, {
+      obj: { a: 'bananas' },
+      opts: {
+        attr: 'a',
+        below: 'apples'
+      },
+      succeed: false,
+      msg: 'undefined if a string value is above a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        below: 100
+      },
+      succeed: false,
+      msg: 'undefined if two number values are equal'
+    }, {
+      obj: { a: 'pineapples' },
+      opts: {
+        attr: 'a',
+        below: 'pineapples'
+      },
+      succeed: false,
+      msg: 'undefined if two string values are equal'
+    }]);
+
+    invalidCompTest(
+      'return undefined if the source value is: ',
+      {
+        attr: 'val',
+        below: 'anything'
+      },
+      false
+    );
+
+    describe('--not', function () {
+      invalidCompTest(
+        'return undefined if the source value is: ',
+        {
+          attr: 'val',
+          below: 'anything',
+          not: true
+        },
+        false
+      );
+    });
 
   });
 });

@@ -178,6 +178,10 @@ Filter only json input entries that match specific rules:
 
 `--attr`: The property to use in order to filter entries. If this flag is used alone, the existence of a value for this property will be treated as truthy, causing the entry will appear in the output. Nested properties can be accessed through dot notation.
 
+`--above`: Optional, used with `attr`. The entry will appear in the ouput only if the `attr` property value is above the value if this flag. This flag only works with strings and numbers, and if the value defined by `attr` is any other type, the entry will not appear in the output.
+
+`--below`: Optional, used with `attr`. The entry will appear in the ouput only if the `attr` property value is below the value if this flag. This flag only works with strings and numbers, and if the value defined by `attr` is any other type, the entry will not appear in the output.
+
 `--equals`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value equals the value of this flag.
 
 `--matches`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value matches the regular expression defined in this flag.
