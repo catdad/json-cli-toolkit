@@ -178,4 +178,146 @@ describe('[filter]', function () {
     }]);
 
   });
+
+  describe('--attr --above', function () {
+
+    createTests([{
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 30
+      },
+      succeed: true,
+      msg: 'the object if a number value is above a number'
+    }, {
+      obj: { a: 'bananas' },
+      opts: {
+        attr: 'a',
+        above: 'apples'
+      },
+      succeed: true,
+      msg: 'the object if a string value is above a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 120
+      },
+      succeed: false,
+      msg: 'undefined if a number value is below a number value'
+    }, {
+      obj: { a: 'apples' },
+      opts: {
+        attr: 'a',
+        above: 'bananas'
+      },
+      succeed: false,
+      msg: 'undefined if a string value is below a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        above: 100
+      },
+      succeed: false,
+      msg: 'undefined if two number values are equal'
+    }, {
+      obj: { a: 'pineapples' },
+      opts: {
+        attr: 'a',
+        above: 'pineapples'
+      },
+      succeed: false,
+      msg: 'undefined if two string values are equal'
+    }]);
+
+    [{ b: 1 }, true, [1, 2, 3]].forEach(function (testval) {
+      it ('return undefined if the source value is: ' + testval.constructor.name, function () {
+        test({ a: testval }, {
+          attr: 'a',
+          above: 'anything'
+        }, false);
+      });
+
+      it('--not return undefined if the value is: ' + testval.constructor.name, function () {
+        test({ a: testval }, {
+          attr: 'a',
+          above: 'anything',
+          not: true
+        }, false);
+      });
+    });
+
+  });
+
+  describe('--attr --below', function () {
+
+    createTests([{
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        below: 120
+      },
+      succeed: true,
+      msg: 'the object if a number value is below a number value'
+    }, {
+      obj: { a: 'apples' },
+      opts: {
+        attr: 'a',
+        below: 'bananas'
+      },
+      succeed: true,
+      msg: 'the object if a string value is below a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        below: 30
+      },
+      succeed: false,
+      msg: 'undefined if a number value is above a number value'
+    }, {
+      obj: { a: 'bananas' },
+      opts: {
+        attr: 'a',
+        below: 'apples'
+      },
+      succeed: false,
+      msg: 'undefined if a string value is above a string value'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
+        below: 100
+      },
+      succeed: false,
+      msg: 'undefined if two number values are equal'
+    }, {
+      obj: { a: 'pineapples' },
+      opts: {
+        attr: 'a',
+        below: 'pineapples'
+      },
+      succeed: false,
+      msg: 'undefined if two string values are equal'
+    }]);
+
+    [{ b: 1 }, true, [1, 2, 3]].forEach(function (testval) {
+      it ('return undefined if the source value is: ' + testval.constructor.name, function () {
+        test({ a: testval }, {
+          attr: 'a',
+          below: 'anything'
+        }, false);
+      });
+
+      it('--not return undefined if the value is: ' + testval.constructor.name, function () {
+        test({ a: testval }, {
+          attr: 'a',
+          below: 'anything',
+          not: true
+        }, false);
+      });
+    });
+
+  });
 });
