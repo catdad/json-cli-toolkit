@@ -166,7 +166,13 @@ describe('[filter]', function () {
 
   });
 
-  var invalidCompValues = [{ b: 1 }, true, [1, 2, 3]];
+  function invalidCompTest(name, opts, succeed) {
+    [{ b: 1 }, true, [1, 2, 3]].forEach(function (testval) {
+      it (name + testval.constructor.name, function () {
+        test({ val: testval }, opts, succeed);
+      });
+    });
+  }
 
   describe('--attr --above', function () {
 
@@ -220,25 +226,25 @@ describe('[filter]', function () {
       msg: 'undefined if two string values are equal'
     }]);
 
-    invalidCompValues.forEach(function (testval) {
-      it ('return undefined if the source value is: ' + testval.constructor.name, function () {
-        test({ a: testval }, {
-          attr: 'a',
-          above: 'anything'
-        }, false);
-      });
-    });
+    invalidCompTest(
+      'return undefined if the source value is: ',
+      {
+        attr: 'val',
+        above: 'anything'
+      },
+      false
+    );
 
     describe('--not', function () {
-      invalidCompValues.forEach(function (testval) {
-        it('--not return undefined if the value is: ' + testval.constructor.name, function () {
-          test({ a: testval }, {
-            attr: 'a',
-            above: 'anything',
-            not: true
-          }, false);
-        });
-      });
+      invalidCompTest(
+        'return undefined if the source value is: ',
+        {
+          attr: 'val',
+          above: 'anything',
+          not: true
+        },
+        false
+      );
     });
 
   });
@@ -295,21 +301,25 @@ describe('[filter]', function () {
       msg: 'undefined if two string values are equal'
     }]);
 
-    [{ b: 1 }, true, [1, 2, 3]].forEach(function (testval) {
-      it ('return undefined if the source value is: ' + testval.constructor.name, function () {
-        test({ a: testval }, {
-          attr: 'a',
-          below: 'anything'
-        }, false);
-      });
+    invalidCompTest(
+      'return undefined if the source value is: ',
+      {
+        attr: 'val',
+        below: 'anything'
+      },
+      false
+    );
 
-      it('--not return undefined if the value is: ' + testval.constructor.name, function () {
-        test({ a: testval }, {
-          attr: 'a',
+    describe('--not', function () {
+      invalidCompTest(
+        'return undefined if the source value is: ',
+        {
+          attr: 'val',
           below: 'anything',
           not: true
-        }, false);
-      });
+        },
+        false
+      );
     });
 
   });
