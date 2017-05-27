@@ -34,37 +34,24 @@ describe('[filter]', function () {
     }
   }
 
-  function runTests(defaultTests, notTests) {
-    defaultTests.forEach(function (func) {
-      func();
+  function createTests(testList) {
+    // make copies, just in case
+    var defaultList = _.cloneDeep(testList);
+    var notList = _.cloneDeep(testList);
+
+    defaultList.forEach(function (desc) {
+      it('returns ' + desc.msg, function () {
+        test(desc.obj, desc.opts, desc.succeed);
+      });
     });
 
     describe('--not', function () {
-      notTests.forEach(function (func) {
-        func();
-      });
-    });
-  }
-
-  function createTests(testList) {
-    var defaultTests = [];
-    var notTests = [];
-
-    testList.forEach(function (desc) {
-      defaultTests.push(function () {
-        it('returns ' + desc.msg, function () {
-          test(desc.obj, desc.opts, desc.succeed);
-        });
-      });
-
-      notTests.push(function () {
+      notList.forEach(function (desc) {
         it('does not return ' + desc.msg, function () {
           notTest(desc.obj, desc.opts, desc.succeed);
         });
       });
     });
-
-    runTests(defaultTests, notTests);
   }
 
   describe('--attr', function () {
@@ -179,6 +166,8 @@ describe('[filter]', function () {
 
   });
 
+  var invalidCompValues = [{ b: 1 }, true, [1, 2, 3]];
+
   describe('--attr --above', function () {
 
     createTests([{
@@ -231,20 +220,24 @@ describe('[filter]', function () {
       msg: 'undefined if two string values are equal'
     }]);
 
-    [{ b: 1 }, true, [1, 2, 3]].forEach(function (testval) {
+    invalidCompValues.forEach(function (testval) {
       it ('return undefined if the source value is: ' + testval.constructor.name, function () {
         test({ a: testval }, {
           attr: 'a',
           above: 'anything'
         }, false);
       });
+    });
 
-      it('--not return undefined if the value is: ' + testval.constructor.name, function () {
-        test({ a: testval }, {
-          attr: 'a',
-          above: 'anything',
-          not: true
-        }, false);
+    describe('--not', function () {
+      invalidCompValues.forEach(function (testval) {
+        it('--not return undefined if the value is: ' + testval.constructor.name, function () {
+          test({ a: testval }, {
+            attr: 'a',
+            above: 'anything',
+            not: true
+          }, false);
+        });
       });
     });
 
