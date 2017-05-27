@@ -196,6 +196,14 @@ describe('[filter]', function () {
       obj: { a: 100 },
       opts: {
         attr: 'a',
+        above: 0
+      },
+      succeed: true,
+      msg: 'the object when 0 is used for the flag'
+    }, {
+      obj: { a: 100 },
+      opts: {
+        attr: 'a',
         above: 120
       },
       succeed: false,
@@ -267,6 +275,14 @@ describe('[filter]', function () {
       },
       succeed: true,
       msg: 'the object if a string value is below a string value'
+    }, {
+      obj: { a: -75 },
+      opts: {
+        attr: 'a',
+        below: 0
+      },
+      succeed: true,
+      msg: 'the object when 0 is used for the flag'
     }, {
       obj: { a: 100 },
       opts: {
