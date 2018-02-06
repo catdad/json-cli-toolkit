@@ -326,6 +326,42 @@ describe('[filter]', function () {
       false
     );
 
+    describe('--attr --in', function () {
+      createTests([{
+        obj: { a: 100 },
+        opts: {
+          attr: 'a',
+          in: [100, 120]
+        },
+        succeed: true,
+        msg: 'the object if a number value is in an array of values'
+      }, {
+        obj: { a: 'pineapples' },
+        opts: {
+          attr: 'a',
+          in: ['kiwis', 'pineapples', 'cherries']
+        },
+        succeed: true,
+        msg: 'the object if a string value is in an array of values'
+      }, {
+        obj: { a: 'pineapples' },
+        opts: {
+          attr: 'a',
+          in: ['kiwis', 'oranges', 'cherries']
+        },
+        succeed: false,
+        msg: 'undefined if a string value is not in an array of values'
+      }, {
+        obj: { a: '1' },
+        opts: {
+          attr: 'a',
+          in: [1, 2, 3]
+        },
+        succeed: false,
+        msg: 'undefined if a value and array types do not match'
+      }]);
+    });
+
     describe('--not', function () {
       invalidCompTest(
         'return undefined if the source value is: ',
