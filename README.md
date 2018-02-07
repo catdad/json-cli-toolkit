@@ -184,6 +184,8 @@ Filter only json input entries that match specific rules:
 
 `--equals`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value equals the value of this flag.
 
+`--in`: Optional, used with `attr`. The entry will appear int he output only if the `attr` property value is included in the list provided with this flag.
+
 `--matches`: Optional, used with `attr`. The entry will appear in the output only if the `attr` property value matches the regular expression defined in this flag.
 
 `--not`: Optional, used with any of the other flags. It will flip the comparison resulting from the other flags being used.
@@ -194,6 +196,7 @@ Filter only json input entries that match specific rules:
 json filter --attr propname --equals muffins
 json filter --attr nested.prop --matches ^[0-9]{3,}
 json filter --attr propname --not --equals poptarts
+json filter --attr propname --in one two three
 ```
 
 #### `json pluck`
