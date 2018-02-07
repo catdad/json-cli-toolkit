@@ -463,6 +463,25 @@ function runTests(execute) {
           opts: {
             attr: 'notone'
           }
+        },
+        extra: {
+          in: {
+            positive: {
+              data: JSON.stringify({ one: 'two' }),
+              opts: {
+                attr: 'one',
+                in: ['one', 'two']
+              }
+            },
+            negative: {
+              data: JSON.stringify({ one: 'three' }),
+              opts: {
+                attr: 'one',
+                in: ['one', 'two']
+              },
+              out: ''
+            }
+          }
         }
       },
       set: {
@@ -547,8 +566,8 @@ function runTests(execute) {
       }
     };
 
-    _.forEach(commands, function (val, command) {
-      describe(util.format('"%s"', command), function () {
+    function createTests(val, command, name) {
+      describe(util.format('"%s"', name || command), function () {
         it('positive test', function (done) {
           testCommand(command, val.positive, done);
         });
@@ -557,6 +576,16 @@ function runTests(execute) {
           testCommand(command, val.negative, done);
         });
       });
+    }
+
+    _.forEach(commands, function testCase(val, command) {
+      createTests(val, command, command);
+
+      if (val.extra) {
+        _.forEach(val.extra, function (extraVal, key) {
+          createTests(extraVal, command, command + ' ' + key);
+        });
+      }
     });
   });
 }
