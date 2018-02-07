@@ -359,6 +359,14 @@ describe('[filter]', function () {
         },
         succeed: false,
         msg: 'undefined if a value and array types do not match'
+      }, {
+        obj: { a: '1' },
+        opts: {
+          attr: 'a',
+          in: '1'
+        },
+        succeed: true,
+        msg: 'the object if a single non-array value is passed is provided and matched'
       }]);
     });
 
